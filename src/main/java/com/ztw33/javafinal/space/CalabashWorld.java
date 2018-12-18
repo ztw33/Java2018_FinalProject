@@ -22,7 +22,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class CalabashWorld {
+public class CalabashWorld implements Runnable {
 	private static final int BATTLEFIELD_ROW = 11;
 	private static final int BATTLEFIELD_COLUMN = 13;
 	private static final int MINIONS_NUM = 6;
@@ -169,14 +169,14 @@ public class CalabashWorld {
 
 	public void gameRoundStart() {
 		
-	/*	for (Good good : goods) {
+		for (Good good : goods) {
 			creatureThreadPool.execute(good);
 		}
 		
 		for (Bad bad : bads) {
 			creatureThreadPool.execute(bad);
-		}*/
-		creatureThreadPool.execute(grandpa);
+		}
+		//creatureThreadPool.execute(grandpa);
 		//ExecutorService 
 		Thread thread = new Thread(guiPainter);
 		thread.start();
@@ -185,6 +185,12 @@ public class CalabashWorld {
 			
 		}
 		guiPainter.kill();
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		gameRoundStart();
 	}
 
 }

@@ -2,6 +2,8 @@ package com.ztw33.javafinal.view;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.ztw33.javafinal.space.CalabashWorld;
 
@@ -63,7 +65,10 @@ public class MainWindowController implements Initializable {
 	private void handleStartBattle() {
 		System.out.println("开始战斗");
 		textArea.appendText("双方准备完毕，战斗开始！\n");
-		calabashWorld.gameRoundStart();
+		//calabashWorld.gameRoundStart();
+		ExecutorService game = Executors.newSingleThreadExecutor();
+		game.execute(calabashWorld);
+		game.shutdown();
 	}
 	
 	@FXML
