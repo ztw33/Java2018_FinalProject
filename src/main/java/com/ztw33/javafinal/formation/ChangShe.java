@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.ztw33.javafinal.space.BattleField;
 import com.ztw33.javafinal.thing.Creature;
 
-public class ChangShe<T extends Creature> implements CanArrangeCreatures {
+public class ChangShe<T extends Creature> implements ArrangeCreaturesInterface {
 
 	@Override
 	public boolean arrangeCreature(BattleField bf, ArrayList<? extends Creature> creatures, int startRow, int startColumn) {

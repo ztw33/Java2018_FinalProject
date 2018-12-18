@@ -7,7 +7,7 @@ import com.ztw33.javafinal.thing.Bad;
 import com.ztw33.javafinal.thing.Creature;
 import com.ztw33.javafinal.thing.Good;
 
-public class HeYi<T extends Creature> implements CanArrangeCreatures {
+public class HeYi<T extends Creature> implements ArrangeCreaturesInterface {
 
 	@Override
 	public boolean arrangeCreature(BattleField bf, ArrayList<? extends Creature> creatures, int startRow, int startColumn) {
