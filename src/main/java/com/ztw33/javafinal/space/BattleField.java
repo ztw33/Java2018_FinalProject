@@ -3,12 +3,14 @@ package com.ztw33.javafinal.space;
 import java.util.concurrent.ExecutorService;
 
 import com.ztw33.javafinal.event.BattleEvent;
-import com.ztw33.javafinal.thing.Bad;
-import com.ztw33.javafinal.thing.Creature;
-import com.ztw33.javafinal.thing.Good;
+import com.ztw33.javafinal.thing.creature.Creature;
+import com.ztw33.javafinal.thing.creature.CreatureState;
+import com.ztw33.javafinal.thing.creature.bad.Bad;
+import com.ztw33.javafinal.thing.creature.good.Good;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 public class BattleField {
 	private Coord[][] coords;
@@ -137,9 +139,24 @@ public class BattleField {
 		for (int i = 0; i < row; i++) {
 			for (int j = 0; j < column; j++) {
 				if (coords[i][j].existCreature()) {
-					Image image = coords[i][j].getCreatrue().getImage();
+					Creature creature = coords[i][j].getCreatrue();
+					Image image = creature.getImage();
 			        gc.drawImage(image, j*COORDWIDTH, i*COORDHEIGHT, IMAGEWIDTH, IMAGEHEIGHT);
-				}
+			        // 绘制血量条
+			        if (creature.getState() != CreatureState.DEAD) {
+			        	gc.setLineWidth(5);
+				        double pct = creature.getHPPCT();
+				        if (pct != 0) {
+				        	gc.setStroke(Color.GREEN);
+				        	gc.strokeLine(j*COORDWIDTH, i*COORDHEIGHT-3, j*COORDWIDTH+IMAGEWIDTH*pct, i*COORDHEIGHT-3);
+				        }
+				        
+				        if(pct != 1) {
+				        	gc.setStroke(Color.RED);
+				        	gc.strokeLine(j*COORDWIDTH+IMAGEWIDTH*pct, i*COORDHEIGHT-3, j*COORDWIDTH+IMAGEWIDTH, i*COORDHEIGHT-3);
+				        }
+			        }
+			     }
 			}
 		}
 	}

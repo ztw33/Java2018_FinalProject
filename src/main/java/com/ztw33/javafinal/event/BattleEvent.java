@@ -3,7 +3,8 @@ package com.ztw33.javafinal.event;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import com.ztw33.javafinal.thing.Creature;
+import com.ztw33.javafinal.thing.creature.Creature;
+import com.ztw33.javafinal.thing.creature.CreatureState;
 
 public class BattleEvent implements Runnable {
 
@@ -14,6 +15,8 @@ public class BattleEvent implements Runnable {
 		// TODO Auto-generated constructor stub
 		this.cala = cala;
 		this.mons = mons;
+		cala.setState(CreatureState.INBATTLE);
+		mons.setState(CreatureState.INBATTLE);
 	}
 	@Override
 	public void run() {
@@ -38,11 +41,14 @@ public class BattleEvent implements Runnable {
 			}
 		}
 		if (cala.getHP() <= 0) {
-			cala.kill();
+			cala.setState(CreatureState.DEAD);
+			mons.setState(CreatureState.RUNNING);
 		}
 		if (mons.getHP() <= 0) {
-			mons.kill();
+			mons.setState(CreatureState.DEAD);
+			cala.setState(CreatureState.RUNNING);
 		}
+		System.out.println(cala.getName()+"和"+mons.getName()+"战斗线程退出");
 	}
 
 }

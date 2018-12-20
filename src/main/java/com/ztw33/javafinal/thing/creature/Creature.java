@@ -1,12 +1,16 @@
-package com.ztw33.javafinal.thing;
+package com.ztw33.javafinal.thing.creature;
 
 import java.util.Random;
 
 import com.ztw33.javafinal.space.BattleField;
 import com.ztw33.javafinal.space.Position;
+import com.ztw33.javafinal.thing.Thing;
+
+import javafx.scene.image.Image;
 
 public abstract class Creature extends Thing implements Runnable{
 	protected String name;
+	protected int fullHP;
 	protected int HP;
 	protected int ATK;
 	protected int DEF;
@@ -14,15 +18,21 @@ public abstract class Creature extends Thing implements Runnable{
 	protected static BattleField field;
 	
 	protected boolean isKilled;
-	protected boolean inBattle = false;
+	//protected boolean inBattle = false;
+	protected CreatureState state = CreatureState.RUNNING;
 	
 	public Creature() {
 		position = new Position();
 		isKilled = false;
 		
-		HP = 100;
+		fullHP = 100;
+		HP = fullHP;
 		ATK = 30;
 		DEF = 5;
+	}
+	
+	public double getHPPCT() {
+		return (double)HP/(double)fullHP;
 	}
 	
 	public static void setField(BattleField field) {
@@ -57,6 +67,10 @@ public abstract class Creature extends Thing implements Runnable{
 			next = 3;
 		} else if (position.getY() > field.getColumn()*2/3) {
 			next = 2;
+		} else if (position.getX() < field.getRow()/2) {
+			next = 1;
+		} else if (position.getX() > field.getRow()*3/4) {
+			next = 0;
 		} else if (next == 0 && position.getX() <= 0) {
 			next = 1;
 		} else if (next == 1 && position.getX() >= field.getRow() - 1) {
@@ -106,7 +120,14 @@ public abstract class Creature extends Thing implements Runnable{
 		System.out.println(name+"当前HP:"+HP);
 	}
 	
-	public void setInBattle() {
-		inBattle = true;
+	public CreatureState getState() {
+		return state;
+	}
+	
+	public void setState(CreatureState state) {
+		this.state = state;
+		if (state == CreatureState.DEAD) {
+			image = new Image("tombstone.png");
+		}
 	}
 }

@@ -3,9 +3,9 @@ package com.ztw33.javafinal.formation;
 import java.util.ArrayList;
 
 import com.ztw33.javafinal.space.BattleField;
-import com.ztw33.javafinal.thing.Bad;
-import com.ztw33.javafinal.thing.Creature;
-import com.ztw33.javafinal.thing.Good;
+import com.ztw33.javafinal.thing.creature.Creature;
+import com.ztw33.javafinal.thing.creature.bad.Bad;
+import com.ztw33.javafinal.thing.creature.good.Good;
 
 public class HeYi<T extends Creature> implements ArrangeCreaturesInterface {
 

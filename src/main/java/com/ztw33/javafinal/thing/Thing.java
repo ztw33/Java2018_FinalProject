@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 
 public abstract class Thing {
 	protected Image image;
-	abstract public Image getImage();
+	public Image getImage() { return image; }
 	
 	protected Position position;
 }

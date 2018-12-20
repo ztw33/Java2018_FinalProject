@@ -1,6 +1,6 @@
 package com.ztw33.javafinal.space;
 
-import com.ztw33.javafinal.thing.Creature;
+import com.ztw33.javafinal.thing.creature.Creature;
 
 public class Coord {
 

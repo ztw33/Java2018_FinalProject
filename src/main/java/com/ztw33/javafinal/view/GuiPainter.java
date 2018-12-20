@@ -21,7 +21,6 @@ public class GuiPainter implements Runnable {
 	public void drawBattleField() {
 		//System.out.println(battleField);
 		GraphicsContext gc = battleFieldCanvas.getGraphicsContext2D();
-		
 		battleField.guiDisplay(gc);
 	}
 
@@ -31,7 +30,6 @@ public class GuiPainter implements Runnable {
 		while (!isKilled) {
 			synchronized (battleField) {
 				drawBattleField();
-				
 			}
 			try {
 				TimeUnit.MILLISECONDS.sleep(50);

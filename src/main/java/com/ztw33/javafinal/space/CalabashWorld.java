@@ -8,14 +8,21 @@ import com.ztw33.javafinal.formation.ChangShe;
 import com.ztw33.javafinal.formation.HeYi;
 import com.ztw33.javafinal.formation.HengE;
 import com.ztw33.javafinal.formation.YanXing;
-import com.ztw33.javafinal.thing.Bad;
-import com.ztw33.javafinal.thing.CalabashBrother;
-import com.ztw33.javafinal.thing.Creature;
-import com.ztw33.javafinal.thing.Good;
-import com.ztw33.javafinal.thing.Grandpa;
-import com.ztw33.javafinal.thing.Minion;
-import com.ztw33.javafinal.thing.Scorpion;
-import com.ztw33.javafinal.thing.Snake;
+import com.ztw33.javafinal.thing.creature.Creature;
+import com.ztw33.javafinal.thing.creature.bad.Bad;
+import com.ztw33.javafinal.thing.creature.bad.Minion;
+import com.ztw33.javafinal.thing.creature.bad.Scorpion;
+import com.ztw33.javafinal.thing.creature.bad.Snake;
+import com.ztw33.javafinal.thing.creature.good.Brother1;
+import com.ztw33.javafinal.thing.creature.good.Brother2;
+import com.ztw33.javafinal.thing.creature.good.Brother3;
+import com.ztw33.javafinal.thing.creature.good.Brother4;
+import com.ztw33.javafinal.thing.creature.good.Brother5;
+import com.ztw33.javafinal.thing.creature.good.Brother6;
+import com.ztw33.javafinal.thing.creature.good.Brother7;
+import com.ztw33.javafinal.thing.creature.good.CalabashBrother;
+import com.ztw33.javafinal.thing.creature.good.Good;
+import com.ztw33.javafinal.thing.creature.good.Grandpa;
 import com.ztw33.javafinal.view.GuiPainter;
 
 import javafx.scene.canvas.Canvas;
@@ -30,13 +37,11 @@ public class CalabashWorld implements Runnable {
 	
 	private BattleField battleField = new BattleField(BATTLEFIELD_ROW, BATTLEFIELD_COLUMN);
 	
-	private ArrayList<CalabashBrother> brothers = new ArrayList<>();
-	private Grandpa grandpa = new Grandpa();
-	private Scorpion scorpion = new Scorpion();
-	private Snake snake = new Snake();
-	private ArrayList<Minion> minions = new ArrayList<>();
+	//private ArrayList<CalabashBrother> brothers = new ArrayList<>();
 	
-	ArrayList<Good> goods;
+	//private ArrayList<Minion> minions = new ArrayList<>();
+	
+	ArrayList<Good> goods = new ArrayList<>();
 	ArrayList<Bad> bads = new ArrayList<>();
 	
 	private int goodsStartRow;
@@ -48,7 +53,7 @@ public class CalabashWorld implements Runnable {
 	private int badsStartColumn;
 	private int badsCrtFmt = 2;
 	
-	private Canvas battleFieldCanvas;
+	//private Canvas battleFieldCanvas;
 	private TextArea textArea;
 	private GuiPainter guiPainter;
 	
@@ -57,25 +62,35 @@ public class CalabashWorld implements Runnable {
 	private ExecutorService battleEventThreadPool = Executors.newCachedThreadPool(); // 所有战斗事件
 	
 	public CalabashWorld(Canvas battleFieldCanvas, TextArea textArea) {
-		this.battleFieldCanvas = battleFieldCanvas;
+		//this.battleFieldCanvas = battleFieldCanvas;
 		this.textArea = textArea;
 		guiPainter = new GuiPainter(battleFieldCanvas, battleField);
+		
 		// 初始化葫芦娃
-		for (int i = 1; i <= 7; i++) {
-			brothers.add(new CalabashBrother(i));
-		}
+		Brother1 brother1 = new Brother1();
+		Brother2 brother2 = new Brother2();
+		Brother3 brother3 = new Brother3();
+		Brother4 brother4 = new Brother4();
+		Brother5 brother5 = new Brother5();
+		Brother6 brother6 = new Brother6();
+		Brother7 brother7 = new Brother7();
+		Grandpa grandpa = new Grandpa();
 		
 		// 葫芦娃阵营
-		goods = new ArrayList<>(brothers);
+		goods.add(brother1);
+		goods.add(brother2);
+		goods.add(brother3);
+		goods.add(brother4);
+		goods.add(brother5);
+		goods.add(brother6);
+		goods.add(brother7);
 		goods.add(grandpa);
 		
-		
 		// 妖精阵营
+		Scorpion scorpion = new Scorpion();
+		Snake snake = new Snake();
 		for (int i = 0; i < MINIONS_NUM; i++) {
-			minions.add(new Minion(i+1));
-		}
-		for (int i = 0; i < MINIONS_NUM; i++) {
-			bads.add(minions.get(i));
+			bads.add(new Minion(i+1));
 		}
 		bads.add(scorpion);
 		bads.add(snake);
@@ -84,7 +99,6 @@ public class CalabashWorld implements Runnable {
 		guiPainter.drawBattleField();
 		
 		Creature.setField(battleField);
-		
 		battleField.setBattleEventThreadPool(battleEventThreadPool);
 	}
 
@@ -113,7 +127,6 @@ public class CalabashWorld implements Runnable {
 	
 	public void goodsChangeFormation() {
 		battleField.clearAll();
-		
 		goodsCrtFmt = (++goodsCrtFmt)%4;
 		setBothSidesFormation();
 		guiPainter.drawBattleField();
@@ -121,7 +134,6 @@ public class CalabashWorld implements Runnable {
 
 	public void badsChangeFormation() {
 		battleField.clearAll();
-		
 		badsCrtFmt = (++badsCrtFmt)%4;
 		setBothSidesFormation();
 		guiPainter.drawBattleField();
