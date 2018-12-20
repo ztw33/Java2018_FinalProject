@@ -21,15 +21,16 @@ public class BattleEvent implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		while (cala.getHP() > 0 && mons.getHP() > 0) {
+		System.out.println(cala.getName()+"和"+mons.getName()+"战斗线程开始");
+		while (cala.getHP() > 0 && mons.getHP() > 0 && !cala.isKilled() && !mons.isKilled()) {
 			Random random = new Random();
 			int temp = random.nextInt(2);
 			if (temp == 0) {
-				System.out.println(cala.getName()+"攻击了"+mons.getName());
+				//System.out.println(cala.getName()+"攻击了"+mons.getName());
 				mons.beAttacked(cala.getATK());
 				
 			} else {
-				System.out.println(mons.getName()+"攻击了"+cala.getName());
+				//System.out.println(mons.getName()+"攻击了"+cala.getName());
 				cala.beAttacked(mons.getATK());
 				
 			}

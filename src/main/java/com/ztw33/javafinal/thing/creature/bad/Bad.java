@@ -8,6 +8,7 @@ import com.ztw33.javafinal.thing.creature.CreatureState;
 public abstract class Bad extends Creature implements Runnable {
 	@Override
 	public void run() {
+		System.out.println(getName()+"线程开始");
 		while(!isKilled) {
 			synchronized (field) {
 				if(state == CreatureState.RUNNING) {

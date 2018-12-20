@@ -9,6 +9,7 @@ public abstract class Good extends Creature implements Runnable {
 	
 	@Override
 	public void run() {
+		System.out.println(getName()+"线程开始");
 		while(!isKilled) {
 			synchronized (field) {
 				if(state == CreatureState.RUNNING) {

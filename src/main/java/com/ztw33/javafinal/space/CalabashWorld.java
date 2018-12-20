@@ -210,13 +210,16 @@ public class CalabashWorld implements Runnable {
 			
 		}
 		guiPainter.kill();
+		battleEventThreadPool.shutdown();
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+		System.out.println("葫芦世界线程开始");
 		textArea.appendText("双方准备完毕，战斗开始！\n");
 		gameRoundStart();
+		System.out.println("葫芦世界线程退出");
 	}
 
 	public void killAllTheThread() {

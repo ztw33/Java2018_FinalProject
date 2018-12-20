@@ -59,6 +59,8 @@ public abstract class Creature extends Thing implements Runnable{
 		}
 	}
 	
+	public boolean isKilled() { return isKilled; }
+	
 	protected Position getNextPosition() {
 		// 0:上移；1:下移；2：左移；3：右移：4：原地
 		Random random = new Random();
@@ -117,7 +119,7 @@ public abstract class Creature extends Thing implements Runnable{
 	
 	public void beAttacked(int atk) {
 		HP -= (atk - DEF);
-		System.out.println(name+"当前HP:"+HP);
+		//System.out.println(name+"当前HP:"+HP);
 	}
 	
 	public CreatureState getState() {
