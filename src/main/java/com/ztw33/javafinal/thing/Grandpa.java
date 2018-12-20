@@ -1,8 +1,12 @@
 package com.ztw33.javafinal.thing;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+import com.ztw33.javafinal.space.Position;
+
 import javafx.scene.image.Image;
+import javafx.scene.layout.ConstraintsBase;
 
 public class Grandpa extends Good {
 
@@ -18,20 +22,18 @@ public class Grandpa extends Good {
 
 	@Override
 	public void run() {
-		while(true) {
+		while(!isKilled) {
 			synchronized (field) {
-				int tempX = position.getX();
-				int tempY = position.getY();
-				//System.out.println(getName()+"当前位置："+position.getX()+","+position.getY());
-				if(!field.setCreatrue(this, position.getX(), position.getY()+1)) {
-					//System.out.println("放置失败");
-					break;
-				} else {
-					//System.out.println("放置成功");
-					//System.out.println(getName()+"现在位置："+position.getX()+","+position.getY());
-					field.clearCreature(tempX, tempY);
+				if(!inBattle) {
+					// 前方有妖精，触发战斗事件
+					if (field.existBadCreature(position.getX(), position.getY()+1)) {
+						// TODO: 触发战斗事件
+						Creature monster = field.getCreature(position.getX(), position.getY()+1);
+						field.createBattleEvent(this, monster);
+					} else {
+						setCreatureOnNextPosition(getNextPosition());
+					}
 				}
-				
 			}
 			try {
 				TimeUnit.SECONDS.sleep(1);

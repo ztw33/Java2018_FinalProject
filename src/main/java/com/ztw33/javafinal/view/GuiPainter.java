@@ -21,7 +21,7 @@ public class GuiPainter implements Runnable {
 	public void drawBattleField() {
 		//System.out.println(battleField);
 		GraphicsContext gc = battleFieldCanvas.getGraphicsContext2D();
-		gc.clearRect(0, 0, battleFieldCanvas.getWidth(), battleFieldCanvas.getHeight());
+		
 		battleField.guiDisplay(gc);
 	}
 
@@ -31,12 +31,13 @@ public class GuiPainter implements Runnable {
 		while (!isKilled) {
 			synchronized (battleField) {
 				drawBattleField();
-				try {
-					TimeUnit.MILLISECONDS.sleep(50);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				
+			}
+			try {
+				TimeUnit.MILLISECONDS.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		

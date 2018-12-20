@@ -40,13 +40,13 @@ public class MainWindowController implements Initializable {
 	}
 	
 	public void initialize(URL url, ResourceBundle rb) {
-		calabashWorld = new CalabashWorld(battleFieldCanvas);
+		calabashWorld = new CalabashWorld(battleFieldCanvas, textArea);
 	}
 	
 	@FXML
 	private void handleChangeCalabashFmt() {
 		System.out.println("变换阵型（葫芦娃）");
-		textArea.appendText("葫芦娃变换阵型\n");
+		
 		calabashWorld.goodsChangeFormation();
 	}
 	
@@ -64,8 +64,7 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private void handleStartBattle() {
 		System.out.println("开始战斗");
-		textArea.appendText("双方准备完毕，战斗开始！\n");
-		//calabashWorld.gameRoundStart();
+		
 		ExecutorService game = Executors.newSingleThreadExecutor();
 		game.execute(calabashWorld);
 		game.shutdown();
@@ -83,5 +82,10 @@ public class MainWindowController implements Initializable {
     	} else if (event.getCode() == KeyCode.L) {
     		
     	}
+	}
+	
+	public void killAllThread() {
+		System.out.println("Controller");
+		calabashWorld.killAllTheThread();
 	}
 }

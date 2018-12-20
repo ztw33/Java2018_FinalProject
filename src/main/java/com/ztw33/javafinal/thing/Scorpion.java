@@ -18,20 +18,18 @@ public class Scorpion extends Bad {
 
 	@Override
 	public void run() {
-		while(true) {
+		while(!isKilled) {
 			synchronized (field) {
-				int tempX = position.getX();
-				int tempY = position.getY();
-				//System.out.println(getName()+"当前位置："+position.getX()+","+position.getY());
-				if(!field.setCreatrue(this, position.getX(), position.getY()-1)) {
-					//System.out.println("放置失败");
-					break;
-				} else {
-					//System.out.println("放置成功");
-					//System.out.println(getName()+"现在位置："+position.getX()+","+position.getY());
-					field.clearCreature(tempX, tempY);
+				if(!inBattle) {
+					// 前方有敌人，触发战斗事件
+					if (field.existGoodCreature(position.getX(), position.getY()-1)) {
+						// TODO: 触发战斗事件
+						Creature cala = field.getCreature(position.getX(), position.getY()-1);
+						field.createBattleEvent(cala, this);
+					} else {
+						setCreatureOnNextPosition(getNextPosition());
+					}
 				}
-				
 			}
 			try {
 				TimeUnit.SECONDS.sleep(1);

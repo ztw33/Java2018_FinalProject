@@ -20,6 +20,7 @@ import com.ztw33.javafinal.view.GuiPainter;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 
 public class CalabashWorld implements Runnable {
@@ -48,12 +49,16 @@ public class CalabashWorld implements Runnable {
 	private int badsCrtFmt = 2;
 	
 	private Canvas battleFieldCanvas;
+	private TextArea textArea;
 	private GuiPainter guiPainter;
 	
-	private ExecutorService creatureThreadPool = Executors.newCachedThreadPool();
+	private ExecutorService creatureThreadPool = Executors.newCachedThreadPool(); // 所有生物线程
+	private ExecutorService guiThread = Executors.newSingleThreadExecutor(); // GUI绘制是一个线程
+	private ExecutorService battleEventThreadPool = Executors.newCachedThreadPool(); // 所有战斗事件
 	
-	public CalabashWorld(Canvas battleFieldCanvas) {
+	public CalabashWorld(Canvas battleFieldCanvas, TextArea textArea) {
 		this.battleFieldCanvas = battleFieldCanvas;
+		this.textArea = textArea;
 		guiPainter = new GuiPainter(battleFieldCanvas, battleField);
 		// 初始化葫芦娃
 		for (int i = 1; i <= 7; i++) {
@@ -67,7 +72,7 @@ public class CalabashWorld implements Runnable {
 		
 		// 妖精阵营
 		for (int i = 0; i < MINIONS_NUM; i++) {
-			minions.add(new Minion());
+			minions.add(new Minion(i+1));
 		}
 		for (int i = 0; i < MINIONS_NUM; i++) {
 			bads.add(minions.get(i));
@@ -79,9 +84,11 @@ public class CalabashWorld implements Runnable {
 		guiPainter.drawBattleField();
 		
 		Creature.setField(battleField);
+		
+		battleField.setBattleEventThreadPool(battleEventThreadPool);
 	}
 
-	public int getRow() {
+	/*public int getRow() {
 		return BATTLEFIELD_ROW;
 	}
 	
@@ -102,7 +109,7 @@ public class CalabashWorld implements Runnable {
 			System.out.println(bad.getName()+":"+bad.getPosition());
 		}
 		
-	}
+	}*/
 	
 	public void goodsChangeFormation() {
 		battleField.clearAll();
@@ -127,21 +134,25 @@ public class CalabashWorld implements Runnable {
 			goodsStartColumn = 1;
 			ChangShe<Good> formation = new ChangShe<Good>();
 			formation.arrangeCreature(battleField, goods, goodsStartRow, goodsStartColumn);
+			textArea.appendText("葫芦娃摆出了长蛇阵\n");
 		} else if (goodsCrtFmt == 1) {
 			goodsStartRow = 2;
 			goodsStartColumn = 2;
 			HengE<Good> formation = new HengE<Good>();
 			formation.arrangeCreature(battleField, goods, goodsStartRow, goodsStartColumn);
+			textArea.appendText("葫芦娃摆出了衡轭阵\n");
 		} else if (goodsCrtFmt == 2) {
 			goodsStartRow = 2;
 			goodsStartColumn = 4;
 			HeYi<Good> formation = new HeYi<Good>();
 			formation.arrangeCreature(battleField, goods, goodsStartRow, goodsStartColumn);
+			textArea.appendText("葫芦娃摆出了鹤翼阵\n");
 		} else if (goodsCrtFmt == 3) {
 			goodsStartRow = 1;
 			goodsStartColumn = 0;
 			YanXing<Good> formation = new YanXing<Good>();
 			formation.arrangeCreature(battleField, goods, goodsStartRow, goodsStartColumn);
+			textArea.appendText("葫芦娃摆出了雁行阵\n");
 		}
 		
 		if (badsCrtFmt == 0) {
@@ -149,21 +160,25 @@ public class CalabashWorld implements Runnable {
 			badsStartColumn = 11;
 			ChangShe<Bad> formation = new ChangShe<Bad>();
 			formation.arrangeCreature(battleField, bads, badsStartRow, badsStartColumn);
+			textArea.appendText("妖精摆出了长蛇阵\n");
 		} else if (badsCrtFmt == 1) {
 			badsStartRow = 1;
 			badsStartColumn = 11;
 			HengE<Bad> formation = new HengE<Bad>();
 			formation.arrangeCreature(battleField, bads, badsStartRow, badsStartColumn);
+			textArea.appendText("妖精摆出了衡轭阵\n");
 		} else if (badsCrtFmt == 2) {
 			badsStartRow = 2;
 			badsStartColumn = 8;
 			HeYi<Bad> formation = new HeYi<Bad>();
 			formation.arrangeCreature(battleField, bads, badsStartRow, badsStartColumn);
+			textArea.appendText("妖精摆出了鹤翼阵\n");
 		} else if (badsCrtFmt == 3) {
 			badsStartRow = 1;
 			badsStartColumn = 4;
 			YanXing<Bad> formation = new YanXing<Bad>();
 			formation.arrangeCreature(battleField, bads, badsStartRow, badsStartColumn);
+			textArea.appendText("妖精摆出了雁行阵\n");
 		}
 	}
 
@@ -176,11 +191,9 @@ public class CalabashWorld implements Runnable {
 		for (Bad bad : bads) {
 			creatureThreadPool.execute(bad);
 		}
-		//creatureThreadPool.execute(grandpa);
-		//ExecutorService 
-		Thread thread = new Thread(guiPainter);
-		thread.start();
 		creatureThreadPool.shutdown();
+		guiThread.execute(guiPainter);
+		guiThread.shutdown();
 		while(!creatureThreadPool.isTerminated()) {
 			
 		}
@@ -190,9 +203,19 @@ public class CalabashWorld implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+		textArea.appendText("双方准备完毕，战斗开始！\n");
 		gameRoundStart();
 	}
 
+	public void killAllTheThread() {
+		for (Good good : goods) {
+			good.kill();
+		}
+		for (Bad bad : bads) {
+			bad.kill();
+		}
+		guiPainter.kill();
+	}
 }
 
 	
