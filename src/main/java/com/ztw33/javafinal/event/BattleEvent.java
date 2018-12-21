@@ -43,11 +43,13 @@ public class BattleEvent implements Runnable {
 		}
 		if (cala.getHP() <= 0) {
 			cala.setState(CreatureState.DEAD);
-			mons.setState(CreatureState.RUNNING);
+		} else {
+			cala.setState(CreatureState.RUNNING);
 		}
 		if (mons.getHP() <= 0) {
 			mons.setState(CreatureState.DEAD);
-			cala.setState(CreatureState.RUNNING);
+		} else {
+			mons.setState(CreatureState.RUNNING);
 		}
 		System.out.println(cala.getName()+"和"+mons.getName()+"战斗线程退出");
 	}
