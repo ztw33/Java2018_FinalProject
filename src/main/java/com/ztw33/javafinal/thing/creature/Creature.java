@@ -9,7 +9,10 @@ import com.ztw33.javafinal.thing.Thing;
 import javafx.scene.image.Image;
 
 public abstract class Creature extends Thing implements Runnable{
+	
 	protected String name;
+	protected Position position;
+	
 	protected int fullHP;
 	protected int HP;
 	protected int ATK;
@@ -17,13 +20,12 @@ public abstract class Creature extends Thing implements Runnable{
 	
 	protected static BattleField field;
 	
-	protected boolean isKilled;
+	
 	//protected boolean inBattle = false;
 	protected CreatureState state = CreatureState.RUNNING;
 	
 	public Creature() {
 		position = new Position();
-		isKilled = false;
 		
 		fullHP = 100;
 		HP = fullHP;
@@ -40,8 +42,8 @@ public abstract class Creature extends Thing implements Runnable{
 	}
 	
 	public void setPosition(int x, int y) {
-		position.setX(x);
-		position.setY(y);
+		position.setRow(x);
+		position.setColumn(y);
 	}
 	
 	public Position getPosition() {
@@ -54,47 +56,45 @@ public abstract class Creature extends Thing implements Runnable{
 	
 	public void kill() {
 		synchronized (field) {
-			field.clearCreature(position.getX(), position.getY());
+			field.clearCreature(position.getRow(), position.getColumn());
 			isKilled = true;
 		}
 	}
-	
-	public boolean isKilled() { return isKilled; }
 	
 	protected Position getNextPosition() {
 		// 0:上移；1:下移；2：左移；3：右移：4：原地
 		Random random = new Random();
 		int next = random.nextInt(5);
-		if (position.getY() < field.getColumn()/3) {
+		if (position.getColumn() < field.getColumn()/3) {
 			next = 3;
-		} else if (position.getY() > field.getColumn()*2/3) {
+		} else if (position.getColumn() > field.getColumn()*2/3) {
 			next = 2;
-		} else if (position.getX() < field.getRow()/2) {
+		} else if (position.getRow() < field.getRow()/2) {
 			next = 1;
-		} else if (position.getX() > field.getRow()*3/4) {
+		} else if (position.getRow() > field.getRow()*3/4) {
 			next = 0;
-		} else if (next == 0 && position.getX() <= 0) {
+		} else if (next == 0 && position.getRow() <= 0) {
 			next = 1;
-		} else if (next == 1 && position.getX() >= field.getRow() - 1) {
+		} else if (next == 1 && position.getRow() >= field.getRow() - 1) {
 			next = 0;
 		}
 		
 		Position nextPos;
 		switch (next) {
 		case 0:
-			nextPos = new Position(position.getX()-1, position.getY());
+			nextPos = new Position(position.getRow()-1, position.getColumn());
 			break;
 		case 1:
-			nextPos = new Position(position.getX()+1, position.getY());
+			nextPos = new Position(position.getRow()+1, position.getColumn());
 			break;
 		case 2:
-			nextPos = new Position(position.getX(), position.getY()-1);
+			nextPos = new Position(position.getRow(), position.getColumn()-1);
 			break;
 		case 3:
-			nextPos = new Position(position.getX(), position.getY()+1);
+			nextPos = new Position(position.getRow(), position.getColumn()+1);
 			break;
 		case 4:
-			nextPos = new Position(position.getX(), position.getY());
+			nextPos = new Position(position.getRow(), position.getColumn());
 			break;
 		default:
 			nextPos = new Position();
@@ -104,9 +104,9 @@ public abstract class Creature extends Thing implements Runnable{
 	}
 	
 	protected void setCreatureOnNextPosition(Position nextPos) {
-		int preX = position.getX();
-		int preY = position.getY();
-		if (field.setCreatrue(this, nextPos.getX(), nextPos.getY())) {
+		int preX = position.getRow();
+		int preY = position.getColumn();
+		if (field.setCreatrue(this, nextPos.getRow(), nextPos.getColumn())) {
 			field.clearCreature(preX, preY);
 		}
 	}
@@ -122,9 +122,7 @@ public abstract class Creature extends Thing implements Runnable{
 		//System.out.println(name+"当前HP:"+HP);
 	}
 	
-	public CreatureState getState() {
-		return state;
-	}
+	public CreatureState getState() { return state; }
 	
 	public void setState(CreatureState state) {
 		this.state = state;

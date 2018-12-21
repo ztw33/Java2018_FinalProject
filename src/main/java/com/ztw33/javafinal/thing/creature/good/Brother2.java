@@ -14,7 +14,7 @@ public class Brother2 extends CalabashBrother implements Runnable {
 		name = "二娃";
 		rank = 2;
 	}
-	
+/*	
 	@Override
 	public void run() {
 		System.out.println(getName()+"线程开始");
@@ -47,12 +47,12 @@ public class Brother2 extends CalabashBrother implements Runnable {
 				isKilled = true;
 			}
 			try {
-				TimeUnit.MILLISECONDS.sleep(500);
+				TimeUnit.MILLISECONDS.sleep(300);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		System.out.println(getName()+"线程退出");
-	}
+	}*/
 }

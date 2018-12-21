@@ -25,6 +25,7 @@ public class BattleEvent implements Runnable {
 		while (cala.getHP() > 0 && mons.getHP() > 0 && !cala.isKilled() && !mons.isKilled()) {
 			Random random = new Random();
 			int temp = random.nextInt(2);
+			// 0表示葫芦娃攻击了妖精，1表示妖精攻击了葫芦娃
 			if (temp == 0) {
 				//System.out.println(cala.getName()+"攻击了"+mons.getName());
 				mons.beAttacked(cala.getATK());

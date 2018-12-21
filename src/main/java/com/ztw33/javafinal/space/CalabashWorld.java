@@ -3,12 +3,14 @@ package com.ztw33.javafinal.space;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import com.ztw33.javafinal.formation.ChangShe;
 import com.ztw33.javafinal.formation.HeYi;
 import com.ztw33.javafinal.formation.HengE;
 import com.ztw33.javafinal.formation.YanXing;
 import com.ztw33.javafinal.thing.creature.Creature;
+import com.ztw33.javafinal.thing.creature.CreatureState;
 import com.ztw33.javafinal.thing.creature.bad.Bad;
 import com.ztw33.javafinal.thing.creature.bad.Minion;
 import com.ztw33.javafinal.thing.creature.bad.Scorpion;
@@ -60,6 +62,7 @@ public class CalabashWorld implements Runnable {
 	private ExecutorService creatureThreadPool = Executors.newCachedThreadPool(); // 所有生物线程
 	private ExecutorService guiThread = Executors.newSingleThreadExecutor(); // GUI绘制是一个线程
 	private ExecutorService battleEventThreadPool = Executors.newCachedThreadPool(); // 所有战斗事件
+	private ExecutorService skillThingThreadPool = Executors.newCachedThreadPool(); // 所有释放的技能
 	
 	public CalabashWorld(Canvas battleFieldCanvas, TextArea textArea) {
 		//this.battleFieldCanvas = battleFieldCanvas;
@@ -99,7 +102,7 @@ public class CalabashWorld implements Runnable {
 		guiPainter.drawBattleField();
 		
 		Creature.setField(battleField);
-		battleField.setBattleEventThreadPool(battleEventThreadPool);
+		battleField.setEventThreadPool(battleEventThreadPool, skillThingThreadPool);
 	}
 
 	/*public int getRow() {
@@ -206,11 +209,16 @@ public class CalabashWorld implements Runnable {
 		creatureThreadPool.shutdown();
 		guiThread.execute(guiPainter);
 		guiThread.shutdown();
-		while(!creatureThreadPool.isTerminated()) {
-			
+
+		while (!(allBadsDead()||allGoodsDead())) {}
+
+		try {
+			TimeUnit.SECONDS.sleep(2);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		guiPainter.kill();
-		battleEventThreadPool.shutdown();
+		killAllTheThread();
+		//while(!creatureThreadPool.isTerminated()) {}
 	}
 
 	@Override
@@ -230,6 +238,26 @@ public class CalabashWorld implements Runnable {
 			bad.kill();
 		}
 		guiPainter.kill();
+		battleEventThreadPool.shutdown();
+		skillThingThreadPool.shutdown();
+	}
+	
+	private boolean allGoodsDead() {
+		for (Good good : goods) {
+			if (good.getState() != CreatureState.DEAD) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean allBadsDead() {
+		for (Bad bad : bads) {
+			if (bad.getState() != CreatureState.DEAD) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
 

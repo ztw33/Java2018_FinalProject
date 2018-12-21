@@ -13,9 +13,9 @@ public abstract class Bad extends Creature implements Runnable {
 			synchronized (field) {
 				if(state == CreatureState.RUNNING) {
 					// 前方有敌人，触发战斗事件
-					if (field.existGoodCreature(position.getX(), position.getY()-1)) {
+					if (field.existGoodCreature(position.getRow(), position.getColumn()-1)) {
 						// TODO: 触发战斗事件
-						Creature cala = field.getCreature(position.getX(), position.getY()-1);
+						Creature cala = field.getCreature(position.getRow(), position.getColumn()-1);
 						if (cala.getState() == CreatureState.RUNNING) {
 							field.createBattleEvent(this, cala);
 						} else {
@@ -30,7 +30,7 @@ public abstract class Bad extends Creature implements Runnable {
 				try {
 					TimeUnit.SECONDS.sleep(2);
 					synchronized (field) {
-						field.clearCreature(position.getX(), position.getY());
+						field.clearCreature(position.getRow(), position.getColumn());
 					}
 				} catch (InterruptedException e) {
 					e.printStackTrace();

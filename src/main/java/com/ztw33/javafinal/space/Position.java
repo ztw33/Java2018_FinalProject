@@ -1,52 +1,33 @@
 package com.ztw33.javafinal.space;
 
 public class Position {
-    private int x;
-    private int y;
+	
+    private int row;
+    private int column;
+    
     public Position() {
-        x = -1;
-        y = -1;
+        row = -1;
+        column = -1;
     }
 
-    public Position(int x,int y) {
-        this.x = x;
-        this.y = y;
+    public Position(int row,int column) {
+        this.row = row;
+        this.column = column;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public void setRow(int row) {
+        this.row = row;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public void setColumn(int column) {
+        this.column = column;
     }
 
-    public int getX() {
-        return x;
+    public int getRow() {
+        return row;
     }
 
-    public int getY() {
-        return y;
-    }
-
-    public int getI() {
-        return y/52;
-    }
-
-    public int getJ() {
-        return x/70;
-    }
-
-    public void setI(int i) {
-        y = i*52;
-    }
-
-    public void setJ(int j) {
-        x = j*70;
-    }
-
-    @Override
-    public String toString() {
-        return ""+x+" "+y;
+    public int getColumn() {
+        return column;
     }
 }
