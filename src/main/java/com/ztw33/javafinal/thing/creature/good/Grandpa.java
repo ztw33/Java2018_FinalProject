@@ -8,6 +8,7 @@ import com.ztw33.javafinal.thing.creature.Creature;
 import com.ztw33.javafinal.thing.creature.CreatureState;
 
 import javafx.scene.image.Image;
+import javafx.scene.layout.ConstraintsBase;
 
 public class Grandpa extends Good implements Cure {
 
@@ -51,11 +52,10 @@ public class Grandpa extends Good implements Cure {
 						setCreatureOnNextPosition(getNextPosition());
 						step++;
 					}
-				} else if (state == CreatureState.CURE) { // 治疗时间持续1秒
-					state = CreatureState.RUNNING;
 				}
 			}
-			if (state == CreatureState.DEAD) {
+			switch (state) {
+			case DEAD:
 				try {
 					TimeUnit.SECONDS.sleep(2);
 					synchronized (field) {
@@ -65,14 +65,19 @@ public class Grandpa extends Good implements Cure {
 					e.printStackTrace();
 				}
 				isKilled = true;
-			} else if (state == CreatureState.CURE){
-				// 治疗时间持续1秒后爷爷恢复运动状态
-				state = CreatureState.RUNNING;
-			} else {
+				break;
+			case RUNNING:
 				// 每走10步触发一次治疗
 				if (step%10 == 0) {
 					cure();
 				}
+				break;
+			case CURE:
+				// 治疗时间持续1秒后爷爷恢复运动状态
+				state = CreatureState.RUNNING;
+				break;
+			default:
+				break;
 			}
 			try {
 				TimeUnit.SECONDS.sleep(1);
