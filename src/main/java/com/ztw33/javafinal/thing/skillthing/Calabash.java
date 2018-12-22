@@ -12,7 +12,7 @@ public class Calabash extends SkillThing {
 
 	private int rightBorder;
 	
-	static final int hurt = 15;
+	static final int hurt = 25;
 	
 	public Calabash(int row, int column, int rightBorder) {
 		image = new Image("calabash.png");

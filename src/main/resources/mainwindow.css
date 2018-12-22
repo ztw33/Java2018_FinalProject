@@ -1,5 +1,14 @@
 .root {
-   -fx-background-image: url("battlefield.jpg");
+   -fx-background-image: url("test.jpg");
    -fx-background-size: cover;
    -fx-background-position: center;
+}
+
+.button {
+	-fx-text-fill: #d8d8d8;
+	-fx-font-size: 11pt;
+  	-fx-background-image: url('button.png');
+  	-fx-background-size: 120pt;
+  	-fx-background-repeat: no-repeat;
+  	-fx-background-position: center;
 }

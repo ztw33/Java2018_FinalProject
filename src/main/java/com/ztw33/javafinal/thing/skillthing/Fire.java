@@ -12,7 +12,7 @@ public class Fire extends SkillThing {
 	
 	static int count=0;
 	
-	static final int hurt = 10;
+	static final int hurt = 15;
 	
 	public Fire(int row, int column) {
 		image = new Image("fire.gif");

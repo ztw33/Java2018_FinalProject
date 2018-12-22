@@ -1,6 +1,8 @@
 package com.ztw33.javafinal.view;
 
+import java.io.File;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,12 +13,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 
 public class MainWindowController implements Initializable {
 
+	@FXML
+	private Pane pane;
 	@FXML
 	private Button changeFmtBtn_Calabash;
 	@FXML
@@ -26,9 +31,14 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private Button startBattleBtn;
 	@FXML
-	private Canvas battleFieldCanvas;
+	private Button restartGameBtn;
 	@FXML
-	private TextArea textArea;
+	private Canvas battleFieldCanvas;
+	
+	@FXML
+	private Button saveLogBtn;
+	@FXML
+	private Button discardBtn;
 	
 	private CalabashWorld calabashWorld;
 	
@@ -40,13 +50,15 @@ public class MainWindowController implements Initializable {
 	}
 	
 	public void initialize(URL url, ResourceBundle rb) {
-		calabashWorld = new CalabashWorld(battleFieldCanvas, textArea);
+		calabashWorld = new CalabashWorld(battleFieldCanvas, saveLogBtn, discardBtn);
+		pane.setFocusTraversable(true);
+		/* test */
+		saveLogBtn.setVisible(true);
 	}
 	
 	@FXML
 	private void handleChangeCalabashFmt() {
 		System.out.println("变换阵型（葫芦娃）");
-		
 		calabashWorld.goodsChangeFormation();
 	}
 	
@@ -57,6 +69,20 @@ public class MainWindowController implements Initializable {
 	}
 	
 	@FXML
+	private void handleRestartGame() {
+		System.out.println("按下了重新开始");
+		changeFmtBtn_Calabash.setDisable(false);
+		changeFmtBtn_Monster.setDisable(false);
+		startBattleBtn.setDisable(false);
+		
+		saveLogBtn.setVisible(false);
+		discardBtn.setVisible(false);
+		
+		calabashWorld.killAllTheThread();
+		calabashWorld = new CalabashWorld(battleFieldCanvas, saveLogBtn, discardBtn);
+	}
+	
+	@FXML
 	private void handleReplayGame() {
 		System.out.println("游戏回放");
 	}
@@ -64,7 +90,10 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private void handleStartBattle() {
 		System.out.println("开始战斗");
-		
+		/* 开始战斗后不可变阵，也不可再点击开始战斗 */
+		changeFmtBtn_Calabash.setDisable(true);
+		changeFmtBtn_Monster.setDisable(true);
+		startBattleBtn.setDisable(true);
 		ExecutorService game = Executors.newSingleThreadExecutor();
 		game.execute(calabashWorld);
 		game.shutdown();
@@ -77,7 +106,7 @@ public class MainWindowController implements Initializable {
     		handleChangeCalabashFmt();
     	} else if (event.getCode() == KeyCode.RIGHT) {
     		handleChangeMonsterFmt();
-    	} else if (event.getCode() == KeyCode.SPACE) {
+    	} else if (event.getCode() == KeyCode.S) {
     		handleStartBattle();
     	} else if (event.getCode() == KeyCode.L) {
     		
@@ -87,5 +116,25 @@ public class MainWindowController implements Initializable {
 	public void killAllThread() {
 		System.out.println("killAllThread");
 		calabashWorld.killAllTheThread();
+	}
+	
+	@FXML
+	private void handleSaveLog() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("保存记录");
+		FileChooser.ExtensionFilter fileExtensions = new FileChooser.ExtensionFilter("游戏记录文件", "*.rcd");
+		fileChooser.getExtensionFilters().add(fileExtensions);
+		/* 将初始目录设置为项目当前路径 */
+		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString(); 
+		fileChooser.setInitialDirectory(new File(currentPath));
+		File file = fileChooser.showSaveDialog(null);
+		System.out.println(file.getPath());
+		
+		calabashWorld.saveGameLog(file);
+	}
+	
+	@FXML
+	private void handleDiscard() {
+		handleRestartGame();
 	}
 }

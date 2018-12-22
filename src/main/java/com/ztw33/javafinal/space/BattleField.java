@@ -171,17 +171,12 @@ public class BattleField {
 			        }
 			        /* 绘制血量条 */
 			        if (creature.getState() != CreatureState.DEAD) {
-			        	gc.setLineWidth(5);
+			        	gc.setLineWidth(0);
 				        double pct = creature.getHPPCT();
-				        if (pct != 0) {
-				        	gc.setStroke(Color.GREEN);
-				        	gc.strokeLine(j*COORDWIDTH, i*COORDHEIGHT-3, j*COORDWIDTH+IMAGEWIDTH*pct, i*COORDHEIGHT-3);
-				        }
-				        
-				        if(pct != 1) {
-				        	gc.setStroke(Color.RED);
-				        	gc.strokeLine(j*COORDWIDTH+IMAGEWIDTH*pct, i*COORDHEIGHT-3, j*COORDWIDTH+IMAGEWIDTH, i*COORDHEIGHT-3);
-				        }
+				        gc.setFill(Color.GREEN);
+			        	gc.fillRect(j*COORDWIDTH, i*COORDHEIGHT-3, IMAGEWIDTH*pct, 5);
+			        	gc.setFill(Color.RED);
+			        	gc.fillRect(j*COORDWIDTH+IMAGEWIDTH*pct, i*COORDHEIGHT-3, IMAGEWIDTH*(1-pct), 5);
 			        }
 			     }
 			}

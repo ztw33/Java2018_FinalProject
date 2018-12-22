@@ -19,17 +19,10 @@ public abstract class Creature extends Thing implements Runnable{
 	protected int ATK;
 	protected int DEF;
 	
-	
-	//protected boolean inBattle = false;
 	protected CreatureState state = CreatureState.RUNNING;
 	
 	public Creature() {
 		position = new Position();
-		
-		fullHP = 100;
-		HP = fullHP;
-		ATK = 30;
-		DEF = 5;
 	}
 	
 	public double getHPPCT() {

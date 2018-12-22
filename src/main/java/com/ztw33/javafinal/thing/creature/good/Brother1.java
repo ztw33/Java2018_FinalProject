@@ -9,5 +9,10 @@ public class Brother1 extends CalabashBrother {
 		image = new Image("bro1.png");
 		name = "大娃";
 		rank = 1;
+		
+		fullHP = 250;		
+		ATK = 60;
+		DEF = 10;
+		HP = fullHP;
 	}
 }

@@ -11,6 +11,11 @@ public class Scorpion extends Bad implements Shoot {
 	public Scorpion() {
 		image = new Image("scorpion.png");
 		name = "蝎子精";
+		
+		fullHP = 150;		
+		ATK = 30;
+		DEF = 15;
+		HP = fullHP;
 	}
 
 	@Override

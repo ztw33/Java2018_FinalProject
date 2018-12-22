@@ -15,6 +15,11 @@ public class Brother5 extends CalabashBrother implements Shoot {
 		image = new Image("bro5.png");
 		name = "五娃";
 		rank = 5;
+		
+		fullHP = 100;		
+		ATK = 30;
+		DEF = 15;
+		HP = fullHP;
 	}
 
 	@Override

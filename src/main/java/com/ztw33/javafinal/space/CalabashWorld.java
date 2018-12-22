@@ -1,5 +1,9 @@
 package com.ztw33.javafinal.space;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,7 +31,9 @@ import com.ztw33.javafinal.thing.creature.good.Grandpa;
 import com.ztw33.javafinal.view.GuiPainter;
 
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.TextArea;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 
 public class CalabashWorld implements Runnable {
 	private static final int BATTLEFIELD_ROW = 11;
@@ -52,8 +58,11 @@ public class CalabashWorld implements Runnable {
 	private int badsStartColumn;
 	private int badsCrtFmt = 2;
 	
-	//private Canvas battleFieldCanvas;
-	private TextArea textArea;
+	private Canvas battleFieldCanvas;
+	
+	private Button saveLogBtn;
+	private Button discardBtn;
+	
 	private GuiPainter guiPainter;
 	
 	private ExecutorService creatureThreadPool = Executors.newCachedThreadPool(); // 所有生物线程
@@ -61,9 +70,10 @@ public class CalabashWorld implements Runnable {
 	private ExecutorService battleEventThreadPool = Executors.newCachedThreadPool(); // 所有战斗事件
 	private ExecutorService skillThingThreadPool = Executors.newCachedThreadPool(); // 所有释放的技能
 	
-	public CalabashWorld(Canvas battleFieldCanvas, TextArea textArea) {
-		//this.battleFieldCanvas = battleFieldCanvas;
-		this.textArea = textArea;
+	public CalabashWorld(Canvas battleFieldCanvas, Button saveLogBtn, Button discardBtn) {
+		this.battleFieldCanvas = battleFieldCanvas;
+		this.saveLogBtn = saveLogBtn;
+		this.discardBtn = discardBtn;
 		guiPainter = new GuiPainter(battleFieldCanvas, battleField);
 		
 		// 初始化葫芦娃
@@ -209,19 +219,33 @@ public class CalabashWorld implements Runnable {
 
 		while (!(allBadsDead()||allGoodsDead())) {}
 
+		
+		
 		try {
-			TimeUnit.SECONDS.sleep(2);
+			TimeUnit.SECONDS.sleep(1);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		guiPainter.kill();
+		GraphicsContext gc = battleFieldCanvas.getGraphicsContext2D();
+		if (allBadsDead() && !allGoodsDead()) {
+			gc.drawImage(new Image("victory.png"), 230, 70);
+			saveLogBtn.setVisible(true);
+			discardBtn.setVisible(true);
+		} else if (allGoodsDead() && !allBadsDead()) {
+			gc.drawImage(new Image("failed.png"), 200, 100);
+			saveLogBtn.setVisible(true);
+			discardBtn.setVisible(true);
+		}
 		killAllTheThread();
+		
+		
 		//while(!creatureThreadPool.isTerminated()) {}
 	}
 
 	@Override
 	public void run() {
 		System.out.println("葫芦世界线程开始");
-		textArea.appendText("双方准备完毕，战斗开始！\n");
 		gameRoundStart();
 		System.out.println("葫芦世界线程退出");
 	}
@@ -236,6 +260,10 @@ public class CalabashWorld implements Runnable {
 		guiPainter.kill();
 		battleEventThreadPool.shutdown();
 		skillThingThreadPool.shutdown();
+		/*while(!creatureThreadPool.isTerminated()) {}
+		while(!battleEventThreadPool.isTerminated()) {}
+		while(!skillThingThreadPool.isTerminated()) {}*/
+
 	}
 	
 	private boolean allGoodsDead() {
@@ -254,6 +282,14 @@ public class CalabashWorld implements Runnable {
 			}
 		}
 		return true;
+	}
+
+	public void saveGameLog(File file) {
+		try {
+			OutputStream outputStream = new FileOutputStream(file);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }
 

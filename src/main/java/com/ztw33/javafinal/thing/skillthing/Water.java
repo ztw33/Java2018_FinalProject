@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
 
 public class Water extends SkillThing {
 
-	static final int hurt = 5;
+	static final int hurt = 10;
 	
 	public Water(int coordX, int coordY) {
 		image = new Image("water.gif");

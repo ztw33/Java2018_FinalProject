@@ -17,6 +17,11 @@ public class Grandpa extends Good implements Cure {
 	public Grandpa() {
 		image = new Image("grandpa.png");
 		name = "爷爷";
+		
+		fullHP = 100;		
+		ATK = 20;
+		DEF = 5;
+		HP = fullHP;
 	}
 
 	@Override
@@ -42,7 +47,7 @@ public class Grandpa extends Good implements Cure {
 					// 前方有妖精，触发战斗事件
 					if (field.existBadCreature(position.getRow(), position.getColumn()+1)) {
 						Creature monster = field.getCreature(position.getRow(), position.getColumn()+1);
-						if (monster.getState() == CreatureState.RUNNING) {
+						if (monster.getState() == CreatureState.RUNNING || monster.getState() == CreatureState.CURE) {
 							field.createBattleEvent(this, monster);
 						} else {
 							setCreatureOnNextPosition(getNextPosition());

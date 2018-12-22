@@ -4,15 +4,11 @@
    -fx-background-size: cover;
    -fx-background-position: center;
 }
-/* 
+
 .button {
-    -fx-padding: 5 22 5 22;   
-    -fx-border-color: #e2e2e2;
-    -fx-border-width: 2;
-    -fx-background-radius: 0;
-    -fx-background-color: #1d1d1d;
-    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
-    -fx-font-size: 11pt;
-    -fx-text-fill: #d8d8d8;
-    -fx-background-insets: 0 0 0 0, 0, 1, 2;
-}*/
+	-fx-text-fill: #d8d8d8;
+  	-fx-background-image: url('button.png');
+  	-fx-background-radius: 25;
+  	-fx-background-size: 228pt;
+  	-fx-background-position: center;
+}

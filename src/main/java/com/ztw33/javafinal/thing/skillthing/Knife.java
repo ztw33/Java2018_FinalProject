@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
 
 public class Knife extends SkillThing {
 
-	static final int hurt = 10;
+	static final int hurt = 20;
 	
 	public Knife(int row, int column) {
 		image = new Image("knife.png");

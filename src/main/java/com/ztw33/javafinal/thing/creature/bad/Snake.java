@@ -16,6 +16,11 @@ public class Snake extends Bad implements Cure {
 	public Snake() {
 		image = new Image("snake.png");
 		name = "蛇精";
+		
+		fullHP = 200;		
+		ATK = 40;
+		DEF = 5;
+		HP = fullHP;
 	}
 
 	@Override
@@ -41,7 +46,7 @@ public class Snake extends Bad implements Cure {
 					// 前方有敌人，触发战斗事件
 					if (field.existGoodCreature(position.getRow(), position.getColumn()-1)) {
 						Creature good = field.getCreature(position.getRow(), position.getColumn()-1);
-						if (good.getState() == CreatureState.RUNNING) {
+						if (good.getState() == CreatureState.RUNNING || good.getState() == CreatureState.CURE) {
 							field.createBattleEvent(good, this);
 						} else {
 							setCreatureOnNextPosition(getNextPosition());
@@ -66,8 +71,8 @@ public class Snake extends Bad implements Cure {
 				isKilled = true;
 				break;
 			case RUNNING:
-				// 每走10步触发一次治疗
-				if (step%10 == 0) {
+				// 每走12步触发一次治疗
+				if (step%12 == 0) {
 					cure();
 				}
 				break;

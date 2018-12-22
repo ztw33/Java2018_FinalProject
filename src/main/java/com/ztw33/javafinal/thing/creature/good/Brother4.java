@@ -12,6 +12,11 @@ public class Brother4 extends CalabashBrother implements Shoot {
 		image = new Image("bro4.png");
 		name = "四娃";
 		rank = 4;
+		
+		fullHP = 100;		
+		ATK = 30;
+		DEF = 15;
+		HP = fullHP;
 	}
 
 	@Override

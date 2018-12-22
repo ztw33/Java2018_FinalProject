@@ -18,7 +18,7 @@ public abstract class Bad extends Creature implements Runnable {
 					if (field.existGoodCreature(position.getRow(), position.getColumn()-1)) {
 						// TODO: 触发战斗事件
 						Creature cala = field.getCreature(position.getRow(), position.getColumn()-1);
-						if (cala.getState() == CreatureState.RUNNING) {
+						if (cala.getState() == CreatureState.RUNNING || cala.getState() == CreatureState.CURE) {
 							field.createBattleEvent(this, cala);
 						} else {
 							setCreatureOnNextPosition(getNextPosition());
