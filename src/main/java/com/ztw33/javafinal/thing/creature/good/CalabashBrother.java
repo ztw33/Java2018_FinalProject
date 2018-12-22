@@ -9,6 +9,7 @@ public class CalabashBrother extends Good {
 	protected int rank;
 
 	public void getCured(int add) {
+		CreatureState preState = state;
 		state = CreatureState.CURE;
 		HP += add;
 		if (HP > fullHP) {
@@ -19,7 +20,7 @@ public class CalabashBrother extends Good {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		state = CreatureState.RUNNING;
+		state = preState;
 	}
 	
 	public int getRank() { return rank; }

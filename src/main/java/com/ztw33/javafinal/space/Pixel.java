@@ -16,4 +16,8 @@ public class Pixel {
 	
 	public void setX(int x) { this.x = x; }
 	public void setY(int y) { this.y = y; }
+	
+	public Position getCoordPosition() {
+		return new Position(y/52, x/70);
+	}
 }

@@ -2,6 +2,7 @@ package com.ztw33.javafinal.thing.creature.bad;
 
 import java.util.concurrent.TimeUnit;
 
+import com.ztw33.javafinal.skill.Shoot;
 import com.ztw33.javafinal.thing.creature.Creature;
 import com.ztw33.javafinal.thing.creature.CreatureState;
 
@@ -9,6 +10,7 @@ public abstract class Bad extends Creature implements Runnable {
 	@Override
 	public void run() {
 		System.out.println(getName()+"线程开始");
+		int step = 0;
 		while(!isKilled) {
 			synchronized (field) {
 				if(state == CreatureState.RUNNING) {
@@ -20,9 +22,15 @@ public abstract class Bad extends Creature implements Runnable {
 							field.createBattleEvent(this, cala);
 						} else {
 							setCreatureOnNextPosition(getNextPosition());
+							step++;
 						}
 					} else {
 						setCreatureOnNextPosition(getNextPosition());
+						step++;
+						/* 释放技能(每走3步释放一次技能) */
+						if (this instanceof Shoot && (step+1)%3 == 0) {
+							((Shoot)this).shoot(field);
+						}
 					}
 				}
 			}
@@ -45,5 +53,20 @@ public abstract class Bad extends Creature implements Runnable {
 			}
 		}
 		System.out.println(getName()+"线程退出");
+	}
+
+	public void getCured(int add) {
+		CreatureState preState = state;
+		state = CreatureState.CURE;
+		HP += add;
+		if (HP > fullHP) {
+			HP = fullHP;
+		}
+		try {
+			TimeUnit.MILLISECONDS.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		state = preState;
 	}
 }

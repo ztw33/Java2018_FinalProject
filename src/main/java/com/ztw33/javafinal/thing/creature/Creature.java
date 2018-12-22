@@ -2,13 +2,14 @@ package com.ztw33.javafinal.thing.creature;
 
 import java.util.Random;
 
-import com.ztw33.javafinal.space.BattleField;
 import com.ztw33.javafinal.space.Position;
 import com.ztw33.javafinal.thing.Thing;
 
 import javafx.scene.image.Image;
 
 public abstract class Creature extends Thing implements Runnable{
+	
+	private static final Image deadImage = new Image("tombstone.png");
 	
 	protected String name;
 	protected Position position;
@@ -17,8 +18,6 @@ public abstract class Creature extends Thing implements Runnable{
 	protected int HP;
 	protected int ATK;
 	protected int DEF;
-	
-	protected static BattleField field;
 	
 	
 	//protected boolean inBattle = false;
@@ -37,13 +36,10 @@ public abstract class Creature extends Thing implements Runnable{
 		return (double)HP/(double)fullHP;
 	}
 	
-	public static void setField(BattleField field) {
-		Creature.field = field;
-	}
 	
-	public void setPosition(int x, int y) {
-		position.setRow(x);
-		position.setColumn(y);
+	public void setPosition(int row, int column) {
+		position.setRow(row);
+		position.setColumn(column);
 	}
 	
 	public Position getPosition() {
@@ -127,7 +123,7 @@ public abstract class Creature extends Thing implements Runnable{
 	public void setState(CreatureState state) {
 		this.state = state;
 		if (state == CreatureState.DEAD) {
-			image = new Image("tombstone.png");
+			image = deadImage;
 		}
 	}
 }

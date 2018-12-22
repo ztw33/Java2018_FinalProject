@@ -9,7 +9,7 @@ import com.ztw33.javafinal.formation.ChangShe;
 import com.ztw33.javafinal.formation.HeYi;
 import com.ztw33.javafinal.formation.HengE;
 import com.ztw33.javafinal.formation.YanXing;
-import com.ztw33.javafinal.thing.creature.Creature;
+import com.ztw33.javafinal.thing.Thing;
 import com.ztw33.javafinal.thing.creature.CreatureState;
 import com.ztw33.javafinal.thing.creature.bad.Bad;
 import com.ztw33.javafinal.thing.creature.bad.Minion;
@@ -22,15 +22,12 @@ import com.ztw33.javafinal.thing.creature.good.Brother4;
 import com.ztw33.javafinal.thing.creature.good.Brother5;
 import com.ztw33.javafinal.thing.creature.good.Brother6;
 import com.ztw33.javafinal.thing.creature.good.Brother7;
-import com.ztw33.javafinal.thing.creature.good.CalabashBrother;
 import com.ztw33.javafinal.thing.creature.good.Good;
 import com.ztw33.javafinal.thing.creature.good.Grandpa;
 import com.ztw33.javafinal.view.GuiPainter;
 
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
 
 public class CalabashWorld implements Runnable {
 	private static final int BATTLEFIELD_ROW = 11;
@@ -101,7 +98,7 @@ public class CalabashWorld implements Runnable {
 		setBothSidesFormation();
 		guiPainter.drawBattleField();
 		
-		Creature.setField(battleField);
+		Thing.setField(battleField);
 		battleField.setEventThreadPool(battleEventThreadPool, skillThingThreadPool);
 	}
 
@@ -149,25 +146,25 @@ public class CalabashWorld implements Runnable {
 			goodsStartColumn = 1;
 			ChangShe<Good> formation = new ChangShe<Good>();
 			formation.arrangeCreature(battleField, goods, goodsStartRow, goodsStartColumn);
-			textArea.appendText("葫芦娃摆出了长蛇阵\n");
+			//textArea.appendText("葫芦娃摆出了长蛇阵\n");
 		} else if (goodsCrtFmt == 1) {
 			goodsStartRow = 2;
 			goodsStartColumn = 2;
 			HengE<Good> formation = new HengE<Good>();
 			formation.arrangeCreature(battleField, goods, goodsStartRow, goodsStartColumn);
-			textArea.appendText("葫芦娃摆出了衡轭阵\n");
+			//textArea.appendText("葫芦娃摆出了衡轭阵\n");
 		} else if (goodsCrtFmt == 2) {
 			goodsStartRow = 2;
 			goodsStartColumn = 4;
 			HeYi<Good> formation = new HeYi<Good>();
 			formation.arrangeCreature(battleField, goods, goodsStartRow, goodsStartColumn);
-			textArea.appendText("葫芦娃摆出了鹤翼阵\n");
+			//textArea.appendText("葫芦娃摆出了鹤翼阵\n");
 		} else if (goodsCrtFmt == 3) {
 			goodsStartRow = 1;
 			goodsStartColumn = 0;
 			YanXing<Good> formation = new YanXing<Good>();
 			formation.arrangeCreature(battleField, goods, goodsStartRow, goodsStartColumn);
-			textArea.appendText("葫芦娃摆出了雁行阵\n");
+			//textArea.appendText("葫芦娃摆出了雁行阵\n");
 		}
 		
 		if (badsCrtFmt == 0) {
@@ -175,25 +172,25 @@ public class CalabashWorld implements Runnable {
 			badsStartColumn = 11;
 			ChangShe<Bad> formation = new ChangShe<Bad>();
 			formation.arrangeCreature(battleField, bads, badsStartRow, badsStartColumn);
-			textArea.appendText("妖精摆出了长蛇阵\n");
+			//textArea.appendText("妖精摆出了长蛇阵\n");
 		} else if (badsCrtFmt == 1) {
 			badsStartRow = 1;
 			badsStartColumn = 11;
 			HengE<Bad> formation = new HengE<Bad>();
 			formation.arrangeCreature(battleField, bads, badsStartRow, badsStartColumn);
-			textArea.appendText("妖精摆出了衡轭阵\n");
+			//textArea.appendText("妖精摆出了衡轭阵\n");
 		} else if (badsCrtFmt == 2) {
 			badsStartRow = 2;
 			badsStartColumn = 8;
 			HeYi<Bad> formation = new HeYi<Bad>();
 			formation.arrangeCreature(battleField, bads, badsStartRow, badsStartColumn);
-			textArea.appendText("妖精摆出了鹤翼阵\n");
+			//textArea.appendText("妖精摆出了鹤翼阵\n");
 		} else if (badsCrtFmt == 3) {
 			badsStartRow = 1;
 			badsStartColumn = 4;
 			YanXing<Bad> formation = new YanXing<Bad>();
 			formation.arrangeCreature(battleField, bads, badsStartRow, badsStartColumn);
-			textArea.appendText("妖精摆出了雁行阵\n");
+			//textArea.appendText("妖精摆出了雁行阵\n");
 		}
 	}
 

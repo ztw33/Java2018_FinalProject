@@ -34,7 +34,8 @@ public class BattleField {
 	
 	private ArrayList<SkillThing> skillThings = new ArrayList<>();
 	
-	private Image cureImage = new Image("cure.gif");
+	private Image cureBrosImage = new Image("cureBrothers.gif");
+	private Image cureMonsImage = new Image("cureMonsters.gif");
 	
 	public BattleField(int r, int c) {
 		row = r;
@@ -161,7 +162,12 @@ public class BattleField {
 			        gc.drawImage(image, j*COORDWIDTH, i*COORDHEIGHT, IMAGEWIDTH, IMAGEHEIGHT);
 			        
 			        if (creature.getState() == CreatureState.CURE) {
-			        	gc.drawImage(cureImage, j*COORDWIDTH, i*COORDHEIGHT, IMAGEWIDTH, IMAGEHEIGHT);
+			        	if (creature instanceof Good) {
+			        		gc.drawImage(cureBrosImage, j*COORDWIDTH, i*COORDHEIGHT, IMAGEWIDTH, IMAGEHEIGHT);
+			        	} else {
+			        		gc.drawImage(cureMonsImage, j*COORDWIDTH, i*COORDHEIGHT, IMAGEWIDTH, IMAGEHEIGHT);
+			        	}
+			        	
 			        }
 			        /* 绘制血量条 */
 			        if (creature.getState() != CreatureState.DEAD) {
@@ -181,7 +187,7 @@ public class BattleField {
 			}
 		}
 		
-		/* 绘制技能特效 */
+		/* 删除已经被kill的技能 */
 		synchronized (skillThings) {
 			Iterator<SkillThing> iter = skillThings.iterator();
 	        while (iter.hasNext()) {
@@ -198,6 +204,8 @@ public class BattleField {
 				skillThings.remove(i);
 			}
 		}错误的删除方式！*/
+		
+		/* 绘制技能特效 */
 		for (SkillThing skillThing : skillThings) {
 			if (skillThing instanceof Calabash) {
 				gc.drawImage(skillThing.getImage(), skillThing.getPixelX(), skillThing.getPixelY());
@@ -234,6 +242,21 @@ public class BattleField {
 			}
 		}
 		return brothers;
+	}
+	
+	public ArrayList<Bad> getRunningMonsters() {
+		ArrayList<Bad> monsters = new ArrayList<>();
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				if (coords[i][j].existCreature()) {
+					Creature creature = coords[i][j].getCreatrue();
+					if (creature instanceof Bad && creature.getState() == CreatureState.RUNNING) {
+						monsters.add((Bad) creature);
+					}
+				}
+			}
+		}
+		return monsters;
 	}
 
 	public void createSkillThing(SkillThing skillThing) {

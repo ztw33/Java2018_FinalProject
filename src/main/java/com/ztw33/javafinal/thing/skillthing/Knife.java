@@ -8,29 +8,25 @@ import com.ztw33.javafinal.thing.creature.Creature;
 
 import javafx.scene.image.Image;
 
-public class Calabash extends SkillThing {
+public class Knife extends SkillThing {
 
-	private int rightBorder;
+	static final int hurt = 10;
 	
-	static final int hurt = 15;
-	
-	public Calabash(int row, int column, int rightBorder) {
-		image = new Image("calabash.png");
+	public Knife(int row, int column) {
+		image = new Image("knife.png");
 		pixel = new Pixel(column*70, row*52+10);
-		this.rightBorder = rightBorder;
 	}
 	
 	@Override
 	public void run() {
-		 
 		while (!isKilled) {
-			if (pixel.getX() < rightBorder) {
+			if (pixel.getX() > 0) {
 				synchronized (field) {
 					Position coordPosition = pixel.getCoordPosition();
-					if (field.existBadCreature(coordPosition.getRow(), coordPosition.getColumn())) {
-						Creature bad = field.getCreature(coordPosition.getRow(), coordPosition.getColumn());
-						bad.beAttacked(hurt);
-						System.out.println("紫葫芦对"+bad.getName()+"造成了"+hurt+"点伤害");
+					if (field.existGoodCreature(coordPosition.getRow(), coordPosition.getColumn())) {
+						Creature good = field.getCreature(coordPosition.getRow(), coordPosition.getColumn());
+						good.beAttacked(hurt);
+						System.out.println("砍刀对"+good.getName()+"造成了"+hurt+"点伤害");
 						isKilled = true;
 						break;
 					}
@@ -40,11 +36,12 @@ public class Calabash extends SkillThing {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				pixel.setX(pixel.getX()+10);
+				pixel.setX(pixel.getX()-10);
 			} else {
 				isKilled = true;
 			}
 		}
+
 	}
 
 }
