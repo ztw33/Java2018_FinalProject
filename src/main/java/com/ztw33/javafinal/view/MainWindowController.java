@@ -78,14 +78,14 @@ public class MainWindowController implements Initializable {
     	} else if (event.getCode() == KeyCode.RIGHT) {
     		handleChangeMonsterFmt();
     	} else if (event.getCode() == KeyCode.SPACE) {
-    		
+    		handleStartBattle();
     	} else if (event.getCode() == KeyCode.L) {
     		
     	}
 	}
 	
 	public void killAllThread() {
-		System.out.println("Controller");
+		System.out.println("killAllThread");
 		calabashWorld.killAllTheThread();
 	}
 }

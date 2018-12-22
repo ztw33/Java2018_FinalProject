@@ -38,7 +38,7 @@ public class Grandpa extends Good implements Cure {
 		int step = 0;
 		while(!isKilled) {
 			synchronized (field) {
-				if (state != CreatureState.DEAD) {
+				if (state == CreatureState.RUNNING || state == CreatureState.CURE) {
 					// 前方有妖精，触发战斗事件
 					if (field.existBadCreature(position.getRow(), position.getColumn()+1)) {
 						Creature monster = field.getCreature(position.getRow(), position.getColumn()+1);

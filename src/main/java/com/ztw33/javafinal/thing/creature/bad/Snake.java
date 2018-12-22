@@ -37,7 +37,7 @@ public class Snake extends Bad implements Cure {
 		int step = 0;
 		while(!isKilled) {
 			synchronized (field) {
-				if (state != CreatureState.DEAD) {
+				if (state == CreatureState.RUNNING || state == CreatureState.CURE) {
 					// 前方有敌人，触发战斗事件
 					if (field.existGoodCreature(position.getRow(), position.getColumn()-1)) {
 						Creature good = field.getCreature(position.getRow(), position.getColumn()-1);

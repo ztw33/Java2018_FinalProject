@@ -220,7 +220,6 @@ public class CalabashWorld implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
 		System.out.println("葫芦世界线程开始");
 		textArea.appendText("双方准备完毕，战斗开始！\n");
 		gameRoundStart();
@@ -241,7 +240,7 @@ public class CalabashWorld implements Runnable {
 	
 	private boolean allGoodsDead() {
 		for (Good good : goods) {
-			if (good.getState() != CreatureState.DEAD) {
+			if (good.getState() != CreatureState.DEAD && !good.isKilled()) {
 				return false;
 			}
 		}
@@ -250,7 +249,7 @@ public class CalabashWorld implements Runnable {
 	
 	private boolean allBadsDead() {
 		for (Bad bad : bads) {
-			if (bad.getState() != CreatureState.DEAD) {
+			if (bad.getState() != CreatureState.DEAD && !bad.isKilled()) {
 				return false;
 			}
 		}
