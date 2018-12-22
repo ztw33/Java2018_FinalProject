@@ -16,6 +16,7 @@ public class Fire extends SkillThing {
 	
 	public Fire(int row, int column) {
 		image = new Image("fire.gif");
+		name = "火";
 		pixel = new Pixel(column*70, row*52);
 	}
 

@@ -1,9 +1,10 @@
 package com.ztw33.javafinal.space;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,6 +14,9 @@ import com.ztw33.javafinal.formation.ChangShe;
 import com.ztw33.javafinal.formation.HeYi;
 import com.ztw33.javafinal.formation.HengE;
 import com.ztw33.javafinal.formation.YanXing;
+import com.ztw33.javafinal.loginfo.CreatureInfo;
+import com.ztw33.javafinal.loginfo.FrameInfo;
+import com.ztw33.javafinal.loginfo.SkillThingInfo;
 import com.ztw33.javafinal.thing.Thing;
 import com.ztw33.javafinal.thing.creature.CreatureState;
 import com.ztw33.javafinal.thing.creature.bad.Bad;
@@ -283,13 +287,30 @@ public class CalabashWorld implements Runnable {
 		}
 		return true;
 	}
-
-	public void saveGameLog(File file) {
+	
+	public void saveGameLog(File file) throws Exception {
+		BufferedWriter fout = null;
 		try {
-			OutputStream outputStream = new FileOutputStream(file);
-		} catch (FileNotFoundException e) {
+			fout = new BufferedWriter(new FileWriter(file));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		ArrayList<FrameInfo> frameInfos = guiPainter.getFrameInfos();
+		for (int i = 0; i < frameInfos.size(); i++) {
+			int creatureInfoNum = frameInfos.get(i).creatureInfos.size();
+			fout.write(creatureInfoNum+"\n");
+			for (CreatureInfo creatureInfo : frameInfos.get(i).creatureInfos) {
+				fout.write(creatureInfo.toString());
+			}
+			int skillThingInfoNum = frameInfos.get(i).skillThingInfos.size();
+			fout.write(skillThingInfoNum+"\n");
+			for (SkillThingInfo skillThingInfo : frameInfos.get(i).skillThingInfos) {
+				fout.write(skillThingInfo.toString());
+			}
+		}
+		fout.flush();
+		fout.close();
 	}
 }
 

@@ -9,9 +9,7 @@ import javafx.scene.image.Image;
 
 public class Brother5 extends CalabashBrother implements Shoot {
 	
-	
 	public Brother5() {
-		// TODO Auto-generated constructor stub
 		image = new Image("bro5.png");
 		name = "五娃";
 		rank = 5;
@@ -37,8 +35,7 @@ public class Brother5 extends CalabashBrother implements Shoot {
 			if (!field.existGoodCreature(position.getRow()+1, position.getColumn())) {
 				field.createSkillThing(new Water(position.getRow()+1, position.getColumn()));
 			}
-		}
-
-		
+		}	
 	}
+	
 }

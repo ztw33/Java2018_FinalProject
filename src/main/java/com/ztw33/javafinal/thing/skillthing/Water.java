@@ -14,6 +14,7 @@ public class Water extends SkillThing {
 	
 	public Water(int coordX, int coordY) {
 		image = new Image("water.gif");
+		name = "水";
 		pixel = new Pixel(coordY*70, coordX*52);
 	}
 	

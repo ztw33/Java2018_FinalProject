@@ -14,6 +14,7 @@ public class Knife extends SkillThing {
 	
 	public Knife(int row, int column) {
 		image = new Image("knife.png");
+		name = "砍刀";
 		pixel = new Pixel(column*70, row*52+10);
 	}
 	

@@ -16,6 +16,7 @@ public class Calabash extends SkillThing {
 	
 	public Calabash(int row, int column, int rightBorder) {
 		image = new Image("calabash.png");
+		name = "宝葫芦";
 		pixel = new Pixel(column*70, row*52+10);
 		this.rightBorder = rightBorder;
 	}

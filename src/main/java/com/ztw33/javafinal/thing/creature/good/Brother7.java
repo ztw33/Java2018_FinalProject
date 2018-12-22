@@ -9,7 +9,6 @@ import javafx.scene.image.Image;
 public class Brother7 extends CalabashBrother implements Shoot {
 	
 	public Brother7() {
-		// TODO Auto-generated constructor stub
 		image = new Image("bro7.png");
 		name = "七娃";
 		rank = 7;

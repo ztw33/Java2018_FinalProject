@@ -5,18 +5,21 @@ import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 
 import com.ztw33.javafinal.event.BattleEvent;
+import com.ztw33.javafinal.loginfo.CreatureInfo;
+import com.ztw33.javafinal.loginfo.FrameInfo;
+import com.ztw33.javafinal.loginfo.SkillThingInfo;
 import com.ztw33.javafinal.thing.creature.Creature;
 import com.ztw33.javafinal.thing.creature.CreatureState;
 import com.ztw33.javafinal.thing.creature.bad.Bad;
 import com.ztw33.javafinal.thing.creature.good.CalabashBrother;
 import com.ztw33.javafinal.thing.creature.good.Good;
 import com.ztw33.javafinal.thing.skillthing.Calabash;
-import com.ztw33.javafinal.thing.skillthing.Fire;
 import com.ztw33.javafinal.thing.skillthing.SkillThing;
-import com.ztw33.javafinal.thing.skillthing.Water;
 
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.layout.ConstraintsBase;
 import javafx.scene.paint.Color;
 
 public class BattleField {
@@ -150,8 +153,11 @@ public class BattleField {
 		}
 	}
 	
-	public void guiDisplay(GraphicsContext gc) {
+	public void guiDisplay(Canvas canvas, ArrayList<FrameInfo> frameInfos) {
+		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+		
+		FrameInfo frameInfo = new FrameInfo();
 		
 		/* 绘制生物 */
 		for (int i = 0; i < row; i++) {
@@ -161,11 +167,17 @@ public class BattleField {
 					Image image = creature.getImage();
 			        gc.drawImage(image, j*COORDWIDTH, i*COORDHEIGHT, IMAGEWIDTH, IMAGEHEIGHT);
 			        
+			        CreatureInfo creatureInfo = new CreatureInfo(creature.getName(), i, j);
+			        creatureInfo.setState(creature.getState());
+			        
 			        if (creature.getState() == CreatureState.CURE) {
+			        	
 			        	if (creature instanceof Good) {
 			        		gc.drawImage(cureBrosImage, j*COORDWIDTH, i*COORDHEIGHT, IMAGEWIDTH, IMAGEHEIGHT);
+			        	
 			        	} else {
 			        		gc.drawImage(cureMonsImage, j*COORDWIDTH, i*COORDHEIGHT, IMAGEWIDTH, IMAGEHEIGHT);
+			        		
 			        	}
 			        	
 			        }
@@ -173,11 +185,15 @@ public class BattleField {
 			        if (creature.getState() != CreatureState.DEAD) {
 			        	gc.setLineWidth(0);
 				        double pct = creature.getHPPCT();
+				        creatureInfo.setHpPCT(pct);
 				        gc.setFill(Color.GREEN);
 			        	gc.fillRect(j*COORDWIDTH, i*COORDHEIGHT-3, IMAGEWIDTH*pct, 5);
 			        	gc.setFill(Color.RED);
 			        	gc.fillRect(j*COORDWIDTH+IMAGEWIDTH*pct, i*COORDHEIGHT-3, IMAGEWIDTH*(1-pct), 5);
 			        }
+			        
+			        /* 加入记录 */
+			        frameInfo.creatureInfos.add(creatureInfo);
 			     }
 			}
 		}
@@ -202,13 +218,19 @@ public class BattleField {
 		
 		/* 绘制技能特效 */
 		for (SkillThing skillThing : skillThings) {
+			SkillThingInfo skillThingInfo = new SkillThingInfo(skillThing.getName());
+			skillThingInfo.setPos(skillThing.getPixelX(), skillThing.getPixelY());
+			frameInfo.skillThingInfos.add(skillThingInfo);
 			if (skillThing instanceof Calabash) {
-				gc.drawImage(skillThing.getImage(), skillThing.getPixelX(), skillThing.getPixelY());
+				gc.drawImage(skillThing.getImage(), skillThing.getPixelX(), skillThing.getPixelY());			
 			} else {
 				gc.drawImage(skillThing.getImage(), skillThing.getPixelX(), skillThing.getPixelY(), IMAGEWIDTH, IMAGEHEIGHT);
 			}
 		}
 		
+		if (frameInfos != null) {
+			frameInfos.add(frameInfo);
+		}
 	}
 	
 	public Creature getCreature(int x, int y) {

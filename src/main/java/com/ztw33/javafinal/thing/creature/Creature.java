@@ -10,8 +10,7 @@ import javafx.scene.image.Image;
 public abstract class Creature extends Thing implements Runnable{
 	
 	private static final Image deadImage = new Image("tombstone.png");
-	
-	protected String name;
+
 	protected Position position;
 	
 	protected int fullHP;
@@ -39,9 +38,6 @@ public abstract class Creature extends Thing implements Runnable{
 		return position;
 	}
 	
-	public String getName() {
-		return name;
-	}
 	
 	public void kill() {
 		synchronized (field) {

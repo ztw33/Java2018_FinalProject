@@ -74,6 +74,7 @@ public class MainWindowController implements Initializable {
 		changeFmtBtn_Calabash.setDisable(false);
 		changeFmtBtn_Monster.setDisable(false);
 		startBattleBtn.setDisable(false);
+		replayGameBtn.setDisable(false);
 		
 		saveLogBtn.setVisible(false);
 		discardBtn.setVisible(false);
@@ -85,14 +86,25 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private void handleReplayGame() {
 		System.out.println("游戏回放");
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("回放记录");
+		FileChooser.ExtensionFilter fileExtensions = new FileChooser.ExtensionFilter("游戏记录文件", "*.rcd");
+		fileChooser.getExtensionFilters().add(fileExtensions);
+		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString(); 
+		fileChooser.setInitialDirectory(new File(currentPath));
+		File file = fileChooser.showOpenDialog(null);
+		ReplayPainter replayPainter = new ReplayPainter(file, battleFieldCanvas);
+		ExecutorService replayGuiThread = Executors.newSingleThreadExecutor();
+		replayGuiThread.execute(replayPainter);
 	}
 	
 	@FXML
 	private void handleStartBattle() {
 		System.out.println("开始战斗");
-		/* 开始战斗后不可变阵，也不可再点击开始战斗 */
+		/* 开始战斗后不可变阵，也不可再点击开始战斗，也不可回放 */
 		changeFmtBtn_Calabash.setDisable(true);
 		changeFmtBtn_Monster.setDisable(true);
+		replayGameBtn.setDisable(true);
 		startBattleBtn.setDisable(true);
 		ExecutorService game = Executors.newSingleThreadExecutor();
 		game.execute(calabashWorld);
@@ -124,13 +136,18 @@ public class MainWindowController implements Initializable {
 		fileChooser.setTitle("保存记录");
 		FileChooser.ExtensionFilter fileExtensions = new FileChooser.ExtensionFilter("游戏记录文件", "*.rcd");
 		fileChooser.getExtensionFilters().add(fileExtensions);
-		/* 将初始目录设置为项目当前路径 */
+		// 将初始目录设置为项目当前路径 
 		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString(); 
 		fileChooser.setInitialDirectory(new File(currentPath));
 		File file = fileChooser.showSaveDialog(null);
 		System.out.println(file.getPath());
 		
-		calabashWorld.saveGameLog(file);
+		try {
+			calabashWorld.saveGameLog(file);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML

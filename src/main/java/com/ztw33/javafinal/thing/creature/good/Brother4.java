@@ -23,4 +23,5 @@ public class Brother4 extends CalabashBrother implements Shoot {
 	public void shoot(BattleField field) {
 		field.createSkillThing(new Fire(position.getRow(), position.getColumn()+1));
 	}
+	
 }

@@ -7,6 +7,8 @@ import javafx.scene.image.Image;
 public abstract class Thing {
 	protected Image image;
 	
+	protected String name;
+	
 	protected static BattleField field;
 	
 	public static void setField(BattleField field) {
@@ -14,6 +16,10 @@ public abstract class Thing {
 	}
 	
 	public Image getImage() { return image; }
+	
+	public String getName() {
+		return name;
+	}
 	
 	protected boolean isKilled = false;
 	
