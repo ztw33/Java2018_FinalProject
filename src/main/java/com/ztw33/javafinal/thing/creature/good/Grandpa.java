@@ -71,8 +71,8 @@ public class Grandpa extends Good implements Cure {
 				isKilled = true;
 				break;
 			case RUNNING:
-				// 每走10步触发一次治疗
-				if (step%10 == 0) {
+				// 每走7步触发一次治疗
+				if (step%7 == 0) {
 					cure();
 				}
 				break;

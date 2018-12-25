@@ -25,6 +25,9 @@ public abstract class Creature extends Thing implements Runnable{
 	}
 	
 	public double getHPPCT() {
+		if (HP <= 0) {
+			return 0;
+		}
 		return (double)HP/(double)fullHP;
 	}
 	
@@ -104,6 +107,9 @@ public abstract class Creature extends Thing implements Runnable{
 	
 	public void beAttacked(int atk) {
 		HP -= (atk - DEF);
+		if (HP < 0) {
+			HP = 0;
+		}
 	}
 	
 	public CreatureState getState() { return state; }

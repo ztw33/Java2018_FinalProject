@@ -71,8 +71,8 @@ public class Snake extends Bad implements Cure {
 				isKilled = true;
 				break;
 			case RUNNING:
-				// 每走12步触发一次治疗
-				if (step%12 == 0) {
+				// 每走10步触发一次治疗
+				if (step%10 == 0) {
 					cure();
 				}
 				break;
