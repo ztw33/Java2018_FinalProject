@@ -42,7 +42,7 @@ public class MainWindowController implements Initializable {
 	
 	private CalabashWorld calabashWorld;
 	
-	
+	ReplayPainter replayPainter;
 	
 	public MainWindowController() {
 		
@@ -53,7 +53,7 @@ public class MainWindowController implements Initializable {
 		calabashWorld = new CalabashWorld(battleFieldCanvas, saveLogBtn, discardBtn);
 		pane.setFocusTraversable(true);
 		/* test */
-		saveLogBtn.setVisible(true);
+		//saveLogBtn.setVisible(true);
 	}
 	
 	@FXML
@@ -71,10 +71,15 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private void handleRestartGame() {
 		System.out.println("按下了重新开始");
+		if (replayPainter != null) {
+			replayPainter.kill();
+		}
+		
 		changeFmtBtn_Calabash.setDisable(false);
 		changeFmtBtn_Monster.setDisable(false);
 		startBattleBtn.setDisable(false);
 		replayGameBtn.setDisable(false);
+		restartGameBtn.setDisable(false);
 		
 		saveLogBtn.setVisible(false);
 		discardBtn.setVisible(false);
@@ -84,8 +89,13 @@ public class MainWindowController implements Initializable {
 	}
 	
 	@FXML
-	private void handleReplayGame() {
+	public void handleReplayGame() {
 		System.out.println("游戏回放");
+		changeFmtBtn_Calabash.setDisable(true);
+		changeFmtBtn_Monster.setDisable(true);
+		startBattleBtn.setDisable(true);
+		replayGameBtn.setDisable(true);
+		restartGameBtn.setDisable(true);
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("回放记录");
 		FileChooser.ExtensionFilter fileExtensions = new FileChooser.ExtensionFilter("游戏记录文件", "*.rcd");
@@ -93,9 +103,16 @@ public class MainWindowController implements Initializable {
 		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString(); 
 		fileChooser.setInitialDirectory(new File(currentPath));
 		File file = fileChooser.showOpenDialog(null);
-		ReplayPainter replayPainter = new ReplayPainter(file, battleFieldCanvas);
-		ExecutorService replayGuiThread = Executors.newSingleThreadExecutor();
-		replayGuiThread.execute(replayPainter);
+		if (file != null) {
+			restartGameBtn.setDisable(false);
+			replayPainter = new ReplayPainter(file, battleFieldCanvas);
+			ExecutorService replayGuiThread = Executors.newSingleThreadExecutor();
+			replayGuiThread.execute(replayPainter);
+			replayGuiThread.shutdown();
+		}
+		else {
+			handleRestartGame();
+		}
 	}
 	
 	@FXML
@@ -121,12 +138,15 @@ public class MainWindowController implements Initializable {
     	} else if (event.getCode() == KeyCode.S) {
     		handleStartBattle();
     	} else if (event.getCode() == KeyCode.L) {
-    		
+    		handleReplayGame();
     	}
 	}
 	
 	public void killAllThread() {
 		System.out.println("killAllThread");
+		if (replayPainter != null) {
+			replayPainter.kill();
+		}
 		calabashWorld.killAllTheThread();
 	}
 	
@@ -140,14 +160,15 @@ public class MainWindowController implements Initializable {
 		String currentPath = Paths.get(".").toAbsolutePath().normalize().toString(); 
 		fileChooser.setInitialDirectory(new File(currentPath));
 		File file = fileChooser.showSaveDialog(null);
-		System.out.println(file.getPath());
-		
-		try {
-			calabashWorld.saveGameLog(file);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (file != null) {
+			try {
+				calabashWorld.saveGameLog(file);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			handleRestartGame();
 		}
+
 	}
 	
 	@FXML

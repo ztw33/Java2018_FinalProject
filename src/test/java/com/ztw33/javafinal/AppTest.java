@@ -1,38 +1,36 @@
 package com.ztw33.javafinal;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Test;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
+import com.ztw33.javafinal.event.BattleEvent;
+import com.ztw33.javafinal.thing.creature.bad.Bad;
+import com.ztw33.javafinal.thing.creature.bad.Minion;
+import com.ztw33.javafinal.thing.creature.bad.Snake;
+import com.ztw33.javafinal.thing.creature.good.Brother1;
+import com.ztw33.javafinal.thing.creature.good.Brother2;
+import com.ztw33.javafinal.thing.creature.good.Good;
+
+import javafx.embed.swing.JFXPanel;
+
+public class AppTest
 {
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+    @Test
+    public void testBattleEvent1() {
+    	new JFXPanel();
+    	Good brother1 = new Brother1();
+    	Bad minion = new Minion(0);
+    	BattleEvent battleEvent = new BattleEvent(brother1, minion);
+    	battleEvent.run();
+    	System.out.print(brother1.getHP()+" "+minion.getHP()+"\n");
     }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+    
+    @Test
+    public void testBattleEvent2() {
+    	new JFXPanel();
+    	Good brother2 = new Brother2();
+    	Bad snake = new Snake();
+    	BattleEvent battleEvent = new BattleEvent(brother2, snake);
+    	battleEvent.run();
+    	System.out.print(brother2.getHP()+" "+snake.getHP()+"\n");
     }
 }

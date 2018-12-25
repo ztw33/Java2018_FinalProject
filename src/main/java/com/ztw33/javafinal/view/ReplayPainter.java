@@ -12,7 +12,6 @@ import com.ztw33.javafinal.loginfo.CreatureInfo;
 import com.ztw33.javafinal.loginfo.FrameInfo;
 import com.ztw33.javafinal.loginfo.SkillThingInfo;
 import com.ztw33.javafinal.thing.creature.CreatureState;
-import com.ztw33.javafinal.thing.skillthing.Calabash;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -23,6 +22,8 @@ public class ReplayPainter implements Runnable {
 
 	ArrayList<FrameInfo> frameInfos = new ArrayList<>();
 	GraphicsContext gc;
+	
+	private boolean isKilled = false;
 	
 	final Image bro1 = new Image("bro1.png");
 	final Image bro2 = new Image("bro2.png");
@@ -43,13 +44,15 @@ public class ReplayPainter implements Runnable {
 	final Image knife = new Image("knife.png");
 	final Image dead = new Image("tombstone.png");
 	
+	int result = 0;
 	
 	public ReplayPainter(File file, Canvas canvas) {
 		gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		try {
 			Scanner fin = new Scanner(new BufferedReader(new FileReader(file)));
-			while(fin.hasNext()) {
+			int frameNum = fin.nextInt();
+			for (int count= 0; count < frameNum; count++) {
 				FrameInfo frameInfo = new FrameInfo();
 				int creatureInfoNum = fin.nextInt();
 				for (int i = 0; i < creatureInfoNum; i++) {
@@ -69,7 +72,8 @@ public class ReplayPainter implements Runnable {
 				}
 				frameInfos.add(frameInfo);
 			}
-			
+			result = fin.nextInt();
+			fin.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,6 +85,10 @@ public class ReplayPainter implements Runnable {
 	public void run() {
 		for (FrameInfo frameInfo : frameInfos) {
 			for (int i = 0; i < frameInfo.creatureInfos.size(); i++) {
+				if (isKilled) {
+					return;
+				}
+				
 				CreatureInfo creatureInfo = frameInfo.creatureInfos.get(i);
 				Image image = null;
 				CharSequence ch = "小喽啰";
@@ -159,6 +167,15 @@ public class ReplayPainter implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		if (result == 0) {
+			gc.drawImage(new Image("failed.png"), 200, 100);
+		} else {
+			gc.drawImage(new Image("victory.png"), 230, 70);
+		}
+		kill();
 	}
 
+	public void kill() {
+		isKilled = true;
+	}
 }

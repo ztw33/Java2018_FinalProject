@@ -5,7 +5,6 @@ import java.util.concurrent.TimeUnit;
 import com.ztw33.javafinal.skill.Shoot;
 import com.ztw33.javafinal.thing.creature.Creature;
 import com.ztw33.javafinal.thing.creature.CreatureState;
-import com.ztw33.javafinal.thing.skillthing.Fire;
 
 public abstract class Good extends Creature implements Runnable {
 	

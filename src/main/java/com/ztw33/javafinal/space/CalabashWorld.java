@@ -2,7 +2,6 @@ package com.ztw33.javafinal.space;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.ztw33.javafinal.annotation.Notice;
 import com.ztw33.javafinal.formation.ChangShe;
 import com.ztw33.javafinal.formation.HeYi;
 import com.ztw33.javafinal.formation.HengE;
@@ -46,12 +46,10 @@ public class CalabashWorld implements Runnable {
 	
 	private BattleField battleField = new BattleField(BATTLEFIELD_ROW, BATTLEFIELD_COLUMN);
 	
-	//private ArrayList<CalabashBrother> brothers = new ArrayList<>();
-	
-	//private ArrayList<Minion> minions = new ArrayList<>();
-	
 	ArrayList<Good> goods = new ArrayList<>();
 	ArrayList<Bad> bads = new ArrayList<>();
+	
+	int battleResult = 0; // 战斗结果，1为胜利，0为失败
 	
 	private int goodsStartRow;
 	private int goodsStartColumn;
@@ -115,29 +113,6 @@ public class CalabashWorld implements Runnable {
 		Thing.setField(battleField);
 		battleField.setEventThreadPool(battleEventThreadPool, skillThingThreadPool);
 	}
-
-	/*public int getRow() {
-		return BATTLEFIELD_ROW;
-	}
-	
-	public int getColumn() {
-		return BATTLEFIELD_COLUMN;
-	}
-	
-	public Image getScorpionImage() {
-		return scorpion.getImage();
-	}
-	
-	public void displayBattleField(GraphicsContext gc) {
-		battleField.guiDisplay(gc);
-		for (Good good : goods) {
-			System.out.println(good.getName()+":"+good.getPosition());
-		}
-		for (Bad bad : bads) {
-			System.out.println(bad.getName()+":"+bad.getPosition());
-		}
-		
-	}*/
 	
 	public void goodsChangeFormation() {
 		battleField.clearAll();
@@ -222,8 +197,6 @@ public class CalabashWorld implements Runnable {
 		guiThread.shutdown();
 
 		while (!(allBadsDead()||allGoodsDead())) {}
-
-		
 		
 		try {
 			TimeUnit.SECONDS.sleep(1);
@@ -233,18 +206,17 @@ public class CalabashWorld implements Runnable {
 		guiPainter.kill();
 		GraphicsContext gc = battleFieldCanvas.getGraphicsContext2D();
 		if (allBadsDead() && !allGoodsDead()) {
+			battleResult = 1;
 			gc.drawImage(new Image("victory.png"), 230, 70);
 			saveLogBtn.setVisible(true);
 			discardBtn.setVisible(true);
 		} else if (allGoodsDead() && !allBadsDead()) {
 			gc.drawImage(new Image("failed.png"), 200, 100);
+			battleResult = 0;
 			saveLogBtn.setVisible(true);
 			discardBtn.setVisible(true);
 		}
 		killAllTheThread();
-		
-		
-		//while(!creatureThreadPool.isTerminated()) {}
 	}
 
 	@Override
@@ -254,6 +226,7 @@ public class CalabashWorld implements Runnable {
 		System.out.println("葫芦世界线程退出");
 	}
 
+	@Notice(message="不太清楚isTerminated的含义", lineBegin=241, lineEnd=243)
 	public void killAllTheThread() {
 		for (Good good : goods) {
 			good.kill();
@@ -261,6 +234,7 @@ public class CalabashWorld implements Runnable {
 		for (Bad bad : bads) {
 			bad.kill();
 		}
+		battleField.kill();
 		guiPainter.kill();
 		battleEventThreadPool.shutdown();
 		skillThingThreadPool.shutdown();
@@ -293,10 +267,10 @@ public class CalabashWorld implements Runnable {
 		try {
 			fout = new BufferedWriter(new FileWriter(file));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		ArrayList<FrameInfo> frameInfos = guiPainter.getFrameInfos();
+		fout.write(frameInfos.size()+"\n");
 		for (int i = 0; i < frameInfos.size(); i++) {
 			int creatureInfoNum = frameInfos.get(i).creatureInfos.size();
 			fout.write(creatureInfoNum+"\n");
@@ -309,6 +283,7 @@ public class CalabashWorld implements Runnable {
 				fout.write(skillThingInfo.toString());
 			}
 		}
+		fout.write(battleResult+"\n");
 		fout.flush();
 		fout.close();
 	}

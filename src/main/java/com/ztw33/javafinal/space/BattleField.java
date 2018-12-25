@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 
+import com.ztw33.javafinal.annotation.Notice;
 import com.ztw33.javafinal.event.BattleEvent;
 import com.ztw33.javafinal.loginfo.CreatureInfo;
 import com.ztw33.javafinal.loginfo.FrameInfo;
@@ -19,7 +20,6 @@ import com.ztw33.javafinal.thing.skillthing.SkillThing;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.layout.ConstraintsBase;
 import javafx.scene.paint.Color;
 
 public class BattleField {
@@ -60,7 +60,6 @@ public class BattleField {
 	}
 	
 	public boolean setCreatrue(Creature creature, int x, int y) {
-		//System.out.println("即将在坐标点("+x+","+y+")放置"+creature.getName());
 		if (x < 0 || x >= row || y < 0 || y >= column)
 			return false;
 		if (coords[x][y].setCreature(creature)) {
@@ -98,26 +97,6 @@ public class BattleField {
 	public void clearCreature(int x, int y) {
 		coords[x][y].clearCreature();
 	}
-/*	
-	public void clearGoods() {
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < column; j++) {
-				if (coords[i][j].existCreature() && coords[i][j].getCreatrue() instanceof Good) {
-					coords[i][j].clearCreature();
-				}
-			}
-		}
-	}
-	
-	public void clearBads() {
-		for (int i = 0; i < row; i++) {
-			for (int j = 0; j < column; j++) {
-				if (coords[i][j].existCreature() && coords[i][j].getCreatrue() instanceof Bad) {
-					coords[i][j].clearCreature();
-				}
-			}
-		}
-	}*/
 	
 	public boolean existCreature(int x, int y) {
 		if (x < 0 || x >= row || y < 0 || y >= column) {
@@ -153,6 +132,7 @@ public class BattleField {
 		}
 	}
 	
+	@Notice(message="不正确的删除ArrayList中元素的方法", lineBegin=193, lineEnd=197)
 	public void guiDisplay(Canvas canvas, ArrayList<FrameInfo> frameInfos) {
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
@@ -282,5 +262,13 @@ public class BattleField {
 			skillThingThreadPool.execute(skillThing);
 		}
 
+	}
+	
+	public void kill() {
+		synchronized (skillThings) {
+			for(SkillThing skillThing : skillThings) {
+				skillThing.kill();
+			}
+		}
 	}
 }

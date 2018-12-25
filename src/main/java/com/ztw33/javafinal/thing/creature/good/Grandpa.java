@@ -8,7 +8,6 @@ import com.ztw33.javafinal.thing.creature.Creature;
 import com.ztw33.javafinal.thing.creature.CreatureState;
 
 import javafx.scene.image.Image;
-import javafx.scene.layout.ConstraintsBase;
 
 public class Grandpa extends Good implements Cure {
 

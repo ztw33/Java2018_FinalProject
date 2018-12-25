@@ -20,6 +20,8 @@ public class StartPageController {
 	@FXML
 	private Button quitBtn;
 	
+	private MainWindowController mainWindowController;
+	
 	public void init(Stage stage) throws Exception{
 		Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("startpage.fxml"));
 		root.getStylesheets().add(getClass().getClassLoader().getResource("application.css").toExternalForm());	
@@ -32,13 +34,11 @@ public class StartPageController {
 	
 	@FXML
 	private void handleStartGame() throws IOException {
-		System.out.println("按下了开始游戏");
 		
 		FXMLLoader fxmlLoader = new FXMLLoader();
 		fxmlLoader.setLocation(getClass().getClassLoader().getResource("mainwindow.fxml"));
 		Parent root = fxmlLoader.load();
 		
-		//Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("mainwindow.fxml"));
 		root.getStylesheets().add(getClass().getClassLoader().getResource("mainwindow.css").toExternalForm());
         Scene scene = new Scene(root,1100,600);
 		Stage stage = (Stage)startBtn.getScene().getWindow();
@@ -46,7 +46,7 @@ public class StartPageController {
 		stage.show();
 		
 		
-		MainWindowController mainWindowController = (MainWindowController)fxmlLoader.getController();
+		mainWindowController = (MainWindowController)fxmlLoader.getController();
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
@@ -57,8 +57,11 @@ public class StartPageController {
 	}
 	
 	@FXML
-	private void handleReplayGame() {
-		System.out.println("按下了游戏回放");
+	private void handleReplayGame() throws IOException {
+		handleStartGame();
+		if (mainWindowController != null) {
+			mainWindowController.handleReplayGame();
+		}
 	}
 	
 	@FXML

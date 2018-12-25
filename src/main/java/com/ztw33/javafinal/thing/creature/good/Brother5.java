@@ -2,7 +2,6 @@ package com.ztw33.javafinal.thing.creature.good;
 
 import com.ztw33.javafinal.skill.Shoot;
 import com.ztw33.javafinal.space.BattleField;
-import com.ztw33.javafinal.thing.skillthing.Fire;
 import com.ztw33.javafinal.thing.skillthing.Water;
 
 import javafx.scene.image.Image;

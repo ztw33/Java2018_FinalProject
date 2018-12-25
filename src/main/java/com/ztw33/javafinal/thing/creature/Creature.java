@@ -104,7 +104,6 @@ public abstract class Creature extends Thing implements Runnable{
 	
 	public void beAttacked(int atk) {
 		HP -= (atk - DEF);
-		//System.out.println(name+"当前HP:"+HP);
 	}
 	
 	public CreatureState getState() { return state; }

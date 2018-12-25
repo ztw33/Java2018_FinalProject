@@ -22,8 +22,6 @@ public class GuiPainter implements Runnable {
 	}
 	
 	public void drawBattleField() {
-		//System.out.println(battleField);
-		//GraphicsContext gc = battleFieldCanvas.getGraphicsContext2D();
 		battleField.guiDisplay(battleFieldCanvas, frameInfos);
 	}
 

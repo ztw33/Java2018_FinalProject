@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 public class Brother1 extends CalabashBrother {
 
 	public Brother1() {
-		// TODO Auto-generated constructor stub
 		image = new Image("bro1.png");
 		name = "大娃";
 		rank = 1;
