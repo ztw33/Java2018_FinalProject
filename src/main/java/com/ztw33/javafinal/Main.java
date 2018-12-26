@@ -14,6 +14,7 @@ public class Main extends Application {
     }
 
 	public void start(Stage primaryStage) throws Exception {
+		primaryStage.setTitle("葫芦娃大战妖精");
 		StartPageController startPageController = new StartPageController();
 		startPageController.init(primaryStage);
     }
