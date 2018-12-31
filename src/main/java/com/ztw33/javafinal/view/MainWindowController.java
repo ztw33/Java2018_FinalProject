@@ -131,13 +131,13 @@ public class MainWindowController implements Initializable {
 	@FXML
 	private void handleKeyPressEvent(KeyEvent event) {
 		System.out.println("按下了"+event.getCode()+"键");
-    	if(event.getCode() == KeyCode.LEFT) {
+    	if(event.getCode() == KeyCode.LEFT && !changeFmtBtn_Calabash.isDisable()) {
     		handleChangeCalabashFmt();
-    	} else if (event.getCode() == KeyCode.RIGHT) {
+    	} else if (event.getCode() == KeyCode.RIGHT && !changeFmtBtn_Monster.isDisable()) {
     		handleChangeMonsterFmt();
-    	} else if (event.getCode() == KeyCode.S) {
+    	} else if (event.getCode() == KeyCode.S && !startBattleBtn.isDisable()) {
     		handleStartBattle();
-    	} else if (event.getCode() == KeyCode.L) {
+    	} else if (event.getCode() == KeyCode.L && !replayGameBtn.isDisable()) {
     		handleReplayGame();
     	}
 	}

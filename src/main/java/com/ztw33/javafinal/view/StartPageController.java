@@ -24,7 +24,7 @@ public class StartPageController {
 	
 	public void init(Stage stage) throws Exception{
 		Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("startpage.fxml"));
-		root.getStylesheets().add(getClass().getClassLoader().getResource("application.css").toExternalForm());	
+		root.getStylesheets().add(getClass().getClassLoader().getResource("startpage.css").toExternalForm());	
 		Scene scene = new Scene(root,1100,600);
 		stage.setScene(scene);
 		stage.show();
